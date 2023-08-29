@@ -1,13 +1,24 @@
-// build: Changes that affect the build system or external dependencies (example scopes: npm, yarn, pnpm)
-// ci: Changes to our CI configuration files and scripts (example scopes: CircleCI, GitHub Actions)
-// docs: Documentation only changes
-// feat: A new feature
-// fix: A bug fix
-// perf: A code change that improves performance
-// refactor: A code change that neither fixes a bug nor adds a feature
-// style: Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc)
-// test: Adding missing tests or correcting existing tests
-module.exports = {
+/*
+ *
+ * All possible types of commits:
+ *
+ * build: Changes that affect the build system or external dependencies
+ * chore: Other changes that don't modify src or test files
+ * ci: Changes to our CI configuration files and scripts
+ * docs: Documentation only changes
+ * feat: A new feature
+ * fix: A bug fix
+ * perf: A code change that improves performance
+ * refactor: A code change that neither fixes a bug nor adds a feature
+ * revert: Reverts a previous commit
+ * style: Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc)
+ * test: Adding missing tests or correcting existing tests
+ * translation: Translation changes
+ * security: Security changes
+ * other: Other types of commits that do not match any of the types above
+ */
+
+const commitLintConfig = {
     extends: ["@commitlint/config-conventional"],
     rules: {
         "body-leading-blank": [1, "always"],
@@ -40,10 +51,11 @@ module.exports = {
                 "revert",
                 "style",
                 "test",
-                "translation",
                 "security",
-                "changeset",
+                "other",
             ],
         ],
     },
 };
+
+export default commitLintConfig;
