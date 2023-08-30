@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-async function createMessageTable() {
+export async function createMessageTable() {
     const messageTable = `
         CREATE TABLE IF NOT EXISTS
             "${process.env.POSTGRES_SCHEMA}".${process.env.POSTGRES_TABLE}(
@@ -16,7 +16,6 @@ async function createMessageTable() {
     pool.query(messageTable)
         .then((res) => {
             console.log(res);
-            pool.end();
         })
         .catch((err) => {
             console.log(err);
@@ -24,16 +23,15 @@ async function createMessageTable() {
         });
 }
 
-async function createSchema() {
+export async function createSchema() {
     const schema = `
         CREATE SCHEMA IF NOT EXISTS
-            ${process.env.POSTGRES_SCHEMA}
+            "${process.env.POSTGRES_SCHEMA}"
     `;
 
     pool.query(schema)
         .then((res) => {
             console.log(res);
-            pool.end();
         })
         .catch((err) => {
             console.log(err);
@@ -47,18 +45,6 @@ const pool = new pg.Pool({
     user: process.env.POSTGRES_USER,
     password: process.env.POSTGRES_PASSWORD,
     database: process.env.POSTGRES_DATABASE,
-});
-
-pool.on("connect", () => {
-    console.log(`Connected to the database`);
-    createSchema().then(() => {
-        createMessageTable();
-    });
-});
-
-pool.on("remove", () => {
-    console.log("Client removed");
-    process.exit(0);
 });
 
 export default pool;
