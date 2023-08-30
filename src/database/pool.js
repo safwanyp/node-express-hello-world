@@ -13,14 +13,12 @@ export async function createMessageTable() {
             )
     `;
 
-    pool.query(messageTable)
-        .then((res) => {
-            console.log(res);
-        })
-        .catch((err) => {
-            console.log(err);
-            pool.end();
-        });
+    try {
+        await pool.query(messageTable);
+    } catch (err) {
+        console.log(err);
+        pool.end();
+    }
 }
 
 export async function createSchema() {
@@ -29,14 +27,12 @@ export async function createSchema() {
             "${process.env.POSTGRES_SCHEMA}"
     `;
 
-    pool.query(schema)
-        .then((res) => {
-            console.log(res);
-        })
-        .catch((err) => {
-            console.log(err);
-            pool.end();
-        });
+    try {
+        await pool.query(schema);
+    } catch (err) {
+        console.log(err);
+        pool.end();
+    }
 }
 
 const pool = new pg.Pool({
@@ -45,6 +41,12 @@ const pool = new pg.Pool({
     user: process.env.POSTGRES_USER,
     password: process.env.POSTGRES_PASSWORD,
     database: process.env.POSTGRES_DATABASE,
+});
+
+pool.on("connect", async () => {
+    console.log("Connected to the database");
+    await createSchema();
+    await createMessageTable();
 });
 
 export default pool;

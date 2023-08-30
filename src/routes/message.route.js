@@ -12,6 +12,7 @@ messageRouter.get(
     validateMessageGetRequest,
     messageController.getMessages,
 );
+
 messageRouter.get(
     "/:id",
     validateMessageGetRequest,
