@@ -1,5 +1,5 @@
 import Ajv from "ajv";
-import responseSchema from "../schemas/response";
+import responseSchema from "../schemas/response.js";
 
 const ajv = new Ajv();
 

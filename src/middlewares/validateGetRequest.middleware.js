@@ -1,5 +1,5 @@
 import Ajv from "ajv";
-import getRequestSchema from "../schemas/GET_request";
+import getRequestSchema from "../schemas/GET_request.js";
 
 const ajv = new Ajv();
 const validateRequest = ajv.compile(getRequestSchema);

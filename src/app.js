@@ -15,7 +15,6 @@ app.use(cors());
 app.use(helmet());
 app.use(express.json());
 
-// Testing the Cloud Build trigger once again finally? nope once again
 createSchema().then(() => {
     console.log("Schema created");
     createMessageTable().then(() => {

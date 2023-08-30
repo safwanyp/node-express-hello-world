@@ -1,5 +1,5 @@
 import Ajv from "ajv";
-import postRequestSchema from "../schemas/POST_request";
+import postRequestSchema from "../schemas/POST_request.js";
 
 const ajv = new Ajv();
 
