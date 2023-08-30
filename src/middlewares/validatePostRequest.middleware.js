@@ -1,9 +1,9 @@
 import Ajv from "ajv";
-import { requestSchema } from "../schemas/POST_request.json";
+import postRequestSchema from "../schemas/POST_request";
 
 const ajv = new Ajv();
 
-const validateRequest = ajv.compile(requestSchema);
+const validateRequest = ajv.compile(postRequestSchema);
 
 function validateMessagePostRequest(req, res, next) {
     const valid = validateRequest(req.body);

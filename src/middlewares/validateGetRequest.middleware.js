@@ -1,8 +1,8 @@
 import Ajv from "ajv";
-import { requestSchema } from "../schemas/GET_request.json";
+import getRequestSchema from "../schemas/GET_request";
 
 const ajv = new Ajv();
-const validateRequest = ajv.compile(requestSchema);
+const validateRequest = ajv.compile(getRequestSchema);
 
 function validateMessageGetRequest(req, res, next) {
     const valid = validateRequest(req.body);
