@@ -8,3 +8,6 @@ env_variables:
     POSTGRES_DATABASE: "postgres"
     POSTGRES_SCHEMA: "node-hw"
     POSTGRES_TABLE: "messages"
+handlers:
+    - url: /.*
+      script: auto
