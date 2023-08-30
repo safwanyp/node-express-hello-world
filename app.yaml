@@ -1,0 +1,13 @@
+runtime: nodejs18
+env_variables:
+    PORT: "3000"
+    POSTGRES_HOST: "/cloudsql/infinite-deck-397306:europe-west6:hello-world-dev"
+    POSTGRES_PORT: "5432"
+    POSTGRES_USER: "postgres"
+    POSTGRES_PASSWORD: "aabbccdd"
+    POSTGRES_DATABASE: "postgres"
+    POSTGRES_SCHEMA: "node-hw"
+    POSTGRES_TABLE: "messages"
+handlers:
+    - url: /.*
+      script: auto

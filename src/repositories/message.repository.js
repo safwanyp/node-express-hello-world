@@ -1,5 +1,5 @@
 import { StatusCodes } from "http-status-codes";
-import pool from "../config/db.js";
+import pool from "../database/pool.js";
 import dotenv from "dotenv";
 import createError from "../utils/createError.js";
 

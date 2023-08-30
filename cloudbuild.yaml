@@ -1,0 +1,16 @@
+steps:
+    # install npm dependencies
+    - name: "gcr.io/cloud-builders/npm"
+      args: ["install"]
+
+    # run formatter check
+    - name: "gcr.io/cloud-builders/npm"
+      args: ["run", "format:check"]
+
+    # run linter check
+    - name: "gcr.io/cloud-builders/npm"
+      args: ["run", "lint:check"]
+
+    # deploy on app engine
+    - name: "gcr.io/cloud-builders/gcloud"
+      args: ["app", "deploy"]
