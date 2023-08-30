@@ -7,6 +7,7 @@ import messageRouter from "./routes/message.route.js";
 
 dotenv.config();
 
+const PORT = process.env.PORT || 3000;
 const app = express();
 
 app.use(cors());
@@ -18,6 +19,6 @@ app.use(express.json());
 app.use("/", indexRouter);
 app.use("/messages", messageRouter);
 
-app.listen(process.env.PORT, () => {
-    console.log(`Server is listening on port ${process.env.PORT}`);
+app.listen(PORT, () => {
+    console.log(`Server listening on port ${PORT}`);
 });
