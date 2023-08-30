@@ -13,6 +13,8 @@ app.use(cors());
 app.use(helmet());
 app.use(express.json());
 
+// Testing the Cloud Build trigger
+
 app.use("/", indexRouter);
 app.use("/messages", messageRouter);
 
