@@ -44,7 +44,6 @@ const pool = new pg.Pool({
 });
 
 pool.on("connect", async () => {
-    console.log("Connected to the database");
     await createSchema();
     await createMessageTable();
 });
