@@ -28,35 +28,47 @@ export async function getMessageById(req, res, next) {
     }
 }
 
+export async function getMessages(req, res, next) {
+    try {
+        const messages = await messageService.getMessages();
+
+        if (messages) {
+            const response = {
+                code: StatusCodes.OK,
+                status: "Success",
+                message: messages,
+            };
+
+            next(response);
+        } else {
+            next({
+                code: StatusCodes.NOT_FOUND,
+                status: "Error",
+                message: "No messages found.",
+            });
+        }
+    } catch (err) {
+        next({
+            code: StatusCodes.INTERNAL_SERVER_ERROR,
+        });
+    }
+}
+
 export async function createMessage(req, res, next) {
     const message = await messageService.createMessage(req.body);
 
     if (message !== null) {
-        res.status(StatusCodes.CREATED).json({
+        const response = {
+            code: StatusCodes.CREATED,
             status: "Success",
             message: message,
-        });
+        };
+
+        next(response);
     } else {
-        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-            status: "Error",
-            message: "Message not created",
+        next({
+            code: StatusCodes.INTERNAL_SERVER_ERROR,
         });
     }
     next();
-}
-
-export async function getMessages(req, res) {
-    const messages = await messageService.getMessages();
-
-    if (messages !== null) {
-        res.status(StatusCodes.OK).json({
-            status: "Success",
-            message: messages,
-        });
-    } else {
-        res.status(StatusCodes.NOT_FOUND).json({
-            status: "Error",
-            message: "Messages not found",
-        });
-    }
 }

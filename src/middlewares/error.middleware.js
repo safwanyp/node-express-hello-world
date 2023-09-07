@@ -1,5 +1,8 @@
 function errorMiddleware(error, req, res, next) {
-    const message = error.message ?? "Something went wrong.";
+    const message =
+        typeof error.message === "string"
+            ? error.message
+            : "Something went wrong";
     const code = error.code || 500;
 
     res.status(code).json({

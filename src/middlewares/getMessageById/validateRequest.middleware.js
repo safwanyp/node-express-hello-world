@@ -1,11 +1,16 @@
 import Ajv from "ajv";
-import getRequestSchema from "../schemas/GET_request.js";
 import { StatusCodes } from "http-status-codes";
 
-const ajv = new Ajv();
-const validateRequest = ajv.compile(getRequestSchema);
+const schema = {
+    type: "object",
+    properties: {},
+    additionalProperties: false,
+};
 
-function validateMessageGetRequest(req, res, next) {
+const ajv = new Ajv();
+const validateRequest = ajv.compile(schema);
+
+function validateGetMessageRequest(req, res, next) {
     const valid = validateRequest(req.body);
 
     if (!valid) {
@@ -19,4 +24,4 @@ function validateMessageGetRequest(req, res, next) {
     next();
 }
 
-export default validateMessageGetRequest;
+export default validateGetMessageRequest;
