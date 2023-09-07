@@ -1,6 +1,5 @@
 import express from "express";
 import * as messageController from "../controllers/message.controller.js";
-import errorMiddleware from "../middlewares/error.middleware.js";
 import validateMessagePostRequest from "../middlewares/validatePostRequest.middleware.js";
 import validateMessageResponse from "../middlewares/validateResponse.middleware.js";
 import validateMessageGetRequest from "../middlewares/validateGetRequest.middleware.js";
@@ -17,7 +16,7 @@ messageRouter.get(
     "/:id",
     validateMessageGetRequest,
     messageController.getMessageById,
-    errorMiddleware,
+    validateMessageResponse,
 );
 
 messageRouter.post(

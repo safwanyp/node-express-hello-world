@@ -5,8 +5,13 @@ const ajv = new Ajv();
 
 const validateResponse = ajv.compile(responseSchema);
 
-function validateMessageResponse(req, res, next) {
-    const valid = validateResponse(res.body);
+function validateMessageResponse(responseObject, req, res, next) {
+    if (responseObject.code >= 500) {
+        next(responseObject);
+        return;
+    }
+
+    const valid = validateResponse(responseObject);
 
     if (!valid) {
         // Log the error for debugging cuz idk what else to do
@@ -15,6 +20,8 @@ function validateMessageResponse(req, res, next) {
             validateResponse.errors,
         );
     }
+
+    res.status(responseObject.code).json(responseObject);
 
     next();
 }

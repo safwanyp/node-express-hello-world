@@ -1,11 +1,14 @@
 const responseSchema = {
     type: "object",
     properties: {
+        code: {
+            type: "number",
+        },
         status: {
             type: "string",
         },
         message: {
-            type: "object",
+            type: ["object", "string"],
             properties: {
                 id: {
                     type: "number",
@@ -20,7 +23,7 @@ const responseSchema = {
             required: ["id", "created_by", "message"],
         },
     },
-    required: ["status", "message"],
+    required: ["status", "message", "code"],
 };
 
 export default responseSchema;

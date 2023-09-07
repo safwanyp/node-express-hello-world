@@ -4,6 +4,7 @@ import cors from "cors";
 import helmet from "helmet";
 import indexRouter from "./routes/index.route.js";
 import messageRouter from "./routes/message.route.js";
+import errorMiddleware from "./middlewares/error.middleware.js";
 
 dotenv.config();
 
@@ -16,6 +17,8 @@ app.use(express.json());
 
 app.use("/", indexRouter);
 app.use("/messages", messageRouter);
+
+app.use(errorMiddleware);
 
 app.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}`);

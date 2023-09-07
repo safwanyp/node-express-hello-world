@@ -6,18 +6,25 @@ export async function getMessageById(req, res, next) {
         const message = await messageService.getMessageById(req.params.id);
 
         if (message) {
-            res.status(StatusCodes.OK).json({
+            const response = {
+                code: StatusCodes.OK,
                 status: "Success",
                 message: message,
-            });
+            };
+
+            next(response);
         } else {
-            res.status(StatusCodes.NOT_FOUND).json({
+            next({
+                code: StatusCodes.NOT_FOUND,
                 status: "Error",
                 message: "Message not found",
             });
         }
     } catch (err) {
-        next(err);
+        // throw server error for middleware to catch
+        next({
+            code: StatusCodes.INTERNAL_SERVER_ERROR,
+        });
     }
 }
 

@@ -1,5 +1,6 @@
 import Ajv from "ajv";
 import getRequestSchema from "../schemas/GET_request.js";
+import { StatusCodes } from "http-status-codes";
 
 const ajv = new Ajv();
 const validateRequest = ajv.compile(getRequestSchema);
@@ -8,9 +9,10 @@ function validateMessageGetRequest(req, res, next) {
     const valid = validateRequest(req.body);
 
     if (!valid) {
-        return res.status(400).json({
+        next({
+            code: StatusCodes.BAD_REQUEST,
             status: "Error",
-            message: validateRequest.errors[0].message,
+            message: "Request body should be empty",
         });
     }
 
