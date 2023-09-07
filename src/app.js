@@ -5,11 +5,14 @@ import helmet from "helmet";
 import indexRouter from "./routes/index.route.js";
 import messageRouter from "./routes/message.route.js";
 import errorMiddleware from "./middlewares/error.middleware.js";
+import httpLogger from "./utils/httpLogger.js";
 
 dotenv.config();
 
 const PORT = process.env.PORT || 3000;
 const app = express();
+
+app.use(httpLogger);
 
 app.use(cors());
 app.use(helmet());
