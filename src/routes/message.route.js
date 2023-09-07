@@ -1,7 +1,7 @@
 import express from "express";
 import * as messageController from "../controllers/message.controller.js";
 import validateMessagePostRequest from "../middlewares/validatePostRequest.middleware.js";
-import validateMessageResponse from "../middlewares/validateResponse.middleware.js";
+import validateGetMessageResponse from "../middlewares/validateGetMessageResponse.middleware.js";
 import validateMessageGetRequest from "../middlewares/validateGetRequest.middleware.js";
 
 const messageRouter = express.Router();
@@ -16,14 +16,14 @@ messageRouter.get(
     "/:id",
     validateMessageGetRequest,
     messageController.getMessageById,
-    validateMessageResponse,
+    validateGetMessageResponse,
 );
 
 messageRouter.post(
     "/",
     validateMessagePostRequest,
     messageController.createMessage,
-    validateMessageResponse,
+    validateGetMessageResponse,
 );
 
 export default messageRouter;
