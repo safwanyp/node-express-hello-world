@@ -1,4 +1,5 @@
 import Ajv from "ajv";
+import logger from "../../utils/logger.js";
 
 const schema = {
     type: "object",
@@ -17,9 +18,18 @@ const ajv = new Ajv();
 const validateRequest = ajv.compile(schema);
 
 function validateCreateMessageRequest(req, res, next) {
+    logger.info(`Validating request body for POST ${req.originalUrl}`, {
+        body: req.body,
+    });
+
     const valid = validateRequest(req.body);
 
     if (!valid) {
+        logger.error("Error validating request body", {
+            errors: validateRequest.errors,
+            body: req.body,
+        });
+
         const response = {
             code: 400,
             status: "Error",
@@ -28,6 +38,10 @@ function validateCreateMessageRequest(req, res, next) {
 
         next(response);
         return;
+    } else {
+        logger.info("Request body is valid", {
+            body: req.body,
+        });
     }
 
     next();

@@ -16,7 +16,7 @@ const httpLogger = morgan(format, {
             const { method, url, status, contentLength, responseTime } =
                 JSON.parse(message);
 
-            logger.info("HTTP Log", {
+            logger.info("Morgan HTTP Log", {
                 timestamp: new Date().toString(),
                 method,
                 url,
