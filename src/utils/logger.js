@@ -1,5 +1,8 @@
 import winston from "winston";
 import __dirname from "./dirname.js";
+import { LoggingWinston } from "@google-cloud/logging-winston";
+
+const loggingWinston = new LoggingWinston();
 
 const options = {
     file: {
@@ -22,6 +25,7 @@ const logger = winston.createLogger({
     transports: [
         new winston.transports.File(options.file),
         new winston.transports.Console(options.console),
+        loggingWinston,
     ],
     exitOnError: false,
 });
