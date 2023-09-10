@@ -1,6 +1,7 @@
 runtime: nodejs18
 env: standard
 env_variables:
+    NODE_ENV: "PROD"
     POSTGRES_HOST: "/cloudsql/infinite-deck-397306:europe-west6:hello-world-dev"
     POSTGRES_PORT: 5432
     POSTGRES_USER: "postgres"

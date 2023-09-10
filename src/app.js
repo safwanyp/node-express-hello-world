@@ -24,6 +24,7 @@ app.use("/messages", messageRouter);
 app.use(errorMiddleware);
 
 app.listen(PORT, () => {
+    console.log("Environment: ", process.env.NODE_ENV);
     console.log(`Server listening on port ${PORT}`);
 });
 

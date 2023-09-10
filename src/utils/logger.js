@@ -1,6 +1,9 @@
 import winston from "winston";
 import __dirname from "./dirname.js";
 import { LoggingWinston } from "@google-cloud/logging-winston";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const loggingWinston = new LoggingWinston();
 
@@ -23,7 +26,6 @@ const options = {
 const logger = winston.createLogger({
     levels: winston.config.npm.levels,
     transports: [
-        new winston.transports.File(options.file),
         new winston.transports.Console(options.console),
         loggingWinston,
     ],
