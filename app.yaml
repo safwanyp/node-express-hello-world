@@ -8,7 +8,9 @@ env_variables:
     POSTGRES_PASSWORD: "aabbccdd"
     POSTGRES_DATABASE: "postgres"
     POSTGRES_SCHEMA: "node-hw"
-    POSTGRES_TABLE: "messages"
+    POSTGRES_MESSAGES_TABLE: "messages"
+    POSTGRES_USERS_TABLE: "users"
+    POSTRGES_TOKENS_TABLE: "tokens"
 handlers:
     - url: /.*
       script: auto

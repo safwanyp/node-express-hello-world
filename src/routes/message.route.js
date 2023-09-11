@@ -5,11 +5,13 @@ import validateGetMessagesResponse from "../middlewares/getMessages/validateResp
 import validateGetMessageRequest from "../middlewares/getMessageById/validateRequest.middleware.js";
 import validateCreateMessageResponse from "../middlewares/createMessage/validateResponse.middleware.js";
 import validateCreateMessageRequest from "../middlewares/createMessage/validateRequest.middleware.js";
+import authMiddleware from "../middlewares/auth.middleware.js";
 
 const messageRouter = express.Router();
 
 messageRouter.get(
     "/",
+    authMiddleware,
     validateGetMessageRequest,
     messageController.getMessages,
     validateGetMessagesResponse,

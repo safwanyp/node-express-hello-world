@@ -6,6 +6,7 @@ import indexRouter from "./routes/index.route.js";
 import messageRouter from "./routes/message.route.js";
 import errorMiddleware from "./middlewares/error.middleware.js";
 import httpLogger from "./utils/httpLogger.js";
+import userRouter from "./routes/user.route.js";
 
 dotenv.config();
 
@@ -20,6 +21,7 @@ app.use(express.json());
 
 app.use("/", indexRouter);
 app.use("/messages", messageRouter);
+app.use("/users", userRouter);
 
 app.use(errorMiddleware);
 
