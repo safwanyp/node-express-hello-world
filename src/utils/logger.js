@@ -7,6 +7,8 @@ dotenv.config();
 
 const loggingWinston = new LoggingWinston();
 
+const transports = [];
+
 const options = {
     file: {
         level: "info",
@@ -23,12 +25,23 @@ const options = {
     },
 };
 
+switch (process.env.NODE_ENV) {
+    case "PROD":
+        transports.push(
+            new winston.transports.Console(options.console),
+            loggingWinston,
+        );
+        break;
+    case "DEV":
+        transports.push(
+            new winston.transports.Console(options.console),
+            new winston.transports.File(options.file),
+        );
+}
+
 const logger = winston.createLogger({
     levels: winston.config.npm.levels,
-    transports: [
-        new winston.transports.Console(options.console),
-        loggingWinston,
-    ],
+    transports: transports,
     exitOnError: false,
 });
 
