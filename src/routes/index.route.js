@@ -1,4 +1,4 @@
-import express from "express";
+const express = require("express");
 
 const indexRouter = express.Router();
 
@@ -6,4 +6,4 @@ indexRouter.get("/", (req, res) => {
     res.status(200).json({ message: "Welcome to the Hello World API!" });
 });
 
-export default indexRouter;
+module.exports = indexRouter;

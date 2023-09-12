@@ -1,6 +1,6 @@
-import Ajv from "ajv";
-import { StatusCodes } from "http-status-codes";
-import logger from "../../utils/logger.js";
+const Ajv = require("ajv");
+const logger = require("../../utils/logger.js");
+const { StatusCodes } = require("http-status-codes");
 
 const schema = {
     type: "object",
@@ -39,4 +39,4 @@ function validateGetMessageRequest(req, res, next) {
     next();
 }
 
-export default validateGetMessageRequest;
+module.exports = validateGetMessageRequest;

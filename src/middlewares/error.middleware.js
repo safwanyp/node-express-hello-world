@@ -1,4 +1,4 @@
-import logger from "../utils/logger.js";
+const logger = require("../utils/logger.js");
 
 function errorMiddleware(error, req, res, next) {
     const message =
@@ -22,4 +22,4 @@ function errorMiddleware(error, req, res, next) {
     next();
 }
 
-export default errorMiddleware;
+module.exports = errorMiddleware;

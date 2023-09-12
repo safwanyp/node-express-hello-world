@@ -1,13 +1,19 @@
-import * as messageRepository from "../repositories/message.repository.js";
+const messageRepository = require("../repositories/message.repository.js");
 
-export async function getMessageById(id) {
+async function getMessageById(id) {
     return await messageRepository.getMessageById(id);
 }
 
-export async function createMessage(body) {
+async function createMessage(body) {
     return await messageRepository.createMessage(body);
 }
 
-export async function getMessages() {
+async function getMessages() {
     return await messageRepository.getMessages();
 }
+
+module.exports = {
+    getMessageById,
+    createMessage,
+    getMessages,
+};

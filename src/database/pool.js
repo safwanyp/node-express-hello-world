@@ -1,9 +1,9 @@
-import pg from "pg";
-import dotenv from "dotenv";
+const pg = require("pg");
+const dotenv = require("dotenv");
 
 dotenv.config();
 
-export async function createUsersTable() {
+async function createUsersTable() {
     const usersTable = `
         CREATE TABLE IF NOT EXISTS
             "${process.env.POSTGRES_SCHEMA}".${process.env.POSTGRES_USERS_TABLE}(
@@ -21,7 +21,7 @@ export async function createUsersTable() {
     }
 }
 
-export async function createTokensTable() {
+async function createTokensTable() {
     const tokensTable = `
         CREATE TABLE IF NOT EXISTS
             "${process.env.POSTGRES_SCHEMA}".${process.env.POSTGRES_TOKENS_TABLE}(
@@ -40,7 +40,7 @@ export async function createTokensTable() {
     }
 }
 
-export async function createMessageTable() {
+async function createMessageTable() {
     const messageTable = `
         CREATE TABLE IF NOT EXISTS
             "${process.env.POSTGRES_SCHEMA}".${process.env.POSTGRES_MESSAGES_TABLE}(
@@ -58,7 +58,7 @@ export async function createMessageTable() {
     }
 }
 
-export async function createSchema() {
+async function createSchema() {
     const schema = `
         CREATE SCHEMA IF NOT EXISTS
             "${process.env.POSTGRES_SCHEMA}"
@@ -80,9 +80,14 @@ const pool = new pg.Pool({
     database: process.env.POSTGRES_DATABASE,
 });
 
-await createSchema();
-await createMessageTable();
-await createUsersTable();
-await createTokensTable();
+createSchema().then(() => {
+    createUsersTable().then(() => {
+        createTokensTable().then(() => {
+            createMessageTable().then(() => {
+                console.log("Database ready");
+            });
+        });
+    });
+});
 
-export default pool;
+module.exports = pool;

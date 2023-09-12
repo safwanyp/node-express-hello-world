@@ -5,4 +5,4 @@ function createError(code, message) {
     return error;
 }
 
-export default createError;
+module.exports = createError;

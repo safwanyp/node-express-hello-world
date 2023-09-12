@@ -1,5 +1,5 @@
-import Ajv from "ajv";
-import logger from "../../utils/logger.js";
+const Ajv = require("ajv");
+const logger = require("../../utils/logger.js");
 
 const schema = {
     type: "object",
@@ -66,4 +66,4 @@ function validateGetMessageResponse(responseObject, req, res, next) {
     next();
 }
 
-export default validateGetMessageResponse;
+module.exports = validateGetMessageResponse;

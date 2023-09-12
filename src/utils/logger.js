@@ -1,7 +1,6 @@
-import winston from "winston";
-import __dirname from "./dirname.js";
-import { LoggingWinston } from "@google-cloud/logging-winston";
-import dotenv from "dotenv";
+const winston = require("winston");
+const { LoggingWinston } = require("@google-cloud/logging-winston");
+const dotenv = require("dotenv");
 
 dotenv.config();
 
@@ -45,4 +44,4 @@ const logger = winston.createLogger({
     exitOnError: false,
 });
 
-export default logger;
+module.exports = logger;

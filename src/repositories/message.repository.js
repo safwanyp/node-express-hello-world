@@ -1,9 +1,9 @@
-import pool from "../database/pool.js";
-import dotenv from "dotenv";
+const pool = require("../database/pool.js");
+const dotenv = require("dotenv");
 
 dotenv.config();
 
-export async function getMessageById(id) {
+async function getMessageById(id) {
     const { rows } = await pool.query(
         `SELECT * FROM 
             "${process.env.POSTGRES_SCHEMA}".${process.env.POSTGRES_MESSAGES_TABLE} 
@@ -15,7 +15,7 @@ export async function getMessageById(id) {
     return rows[0];
 }
 
-export async function createMessage(body) {
+async function createMessage(body) {
     const { rows } = await pool.query(
         `INSERT INTO 
             "${process.env.POSTGRES_SCHEMA}".${process.env.POSTGRES_MESSAGES_TABLE} 
@@ -28,7 +28,7 @@ export async function createMessage(body) {
     return rows[0];
 }
 
-export async function getMessages() {
+async function getMessages() {
     const { rows } = await pool.query(
         `SELECT * FROM 
             "${process.env.POSTGRES_SCHEMA}".${process.env.POSTGRES_MESSAGES_TABLE} 
@@ -38,3 +38,9 @@ export async function getMessages() {
 
     return rows;
 }
+
+module.exports = {
+    getMessageById,
+    createMessage,
+    getMessages,
+};

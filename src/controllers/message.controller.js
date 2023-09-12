@@ -1,8 +1,8 @@
-import { StatusCodes } from "http-status-codes";
-import * as messageService from "../services/message.service.js";
-import logger from "../utils/logger.js";
+const { StatusCodes } = require("http-status-codes");
+const messageService = require("../services/message.service.js");
+const logger = require("../utils/logger.js");
 
-export async function getMessageById(req, res, next) {
+async function getMessageById(req, res, next) {
     try {
         logger.info(`[CONTROLLER] Fetching message by id`, {
             id: req.params.id,
@@ -44,7 +44,7 @@ export async function getMessageById(req, res, next) {
     }
 }
 
-export async function getMessages(req, res, next) {
+async function getMessages(req, res, next) {
     try {
         logger.info(`[CONTROLLER] Fetching all messages`);
 
@@ -82,7 +82,7 @@ export async function getMessages(req, res, next) {
     }
 }
 
-export async function createMessage(req, res, next) {
+async function createMessage(req, res, next) {
     logger.info(`[CONTROLLER] Creating message`, {
         body: req.body,
     });
@@ -112,3 +112,9 @@ export async function createMessage(req, res, next) {
     }
     next();
 }
+
+module.exports = {
+    getMessageById,
+    getMessages,
+    createMessage,
+};

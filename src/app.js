@@ -1,12 +1,13 @@
-import express from "express";
-import dotenv from "dotenv";
-import cors from "cors";
-import helmet from "helmet";
-import indexRouter from "./routes/index.route.js";
-import messageRouter from "./routes/message.route.js";
-import errorMiddleware from "./middlewares/error.middleware.js";
-import httpLogger from "./utils/httpLogger.js";
-import userRouter from "./routes/user.route.js";
+const express = require("express");
+const dotenv = require("dotenv");
+const cors = require("cors");
+const helmet = require("helmet");
+
+const indexRouter = require("./routes/index.route.js");
+const messageRouter = require("./routes/message.route.js");
+const errorMiddleware = require("./middlewares/error.middleware.js");
+const httpLogger = require("./utils/httpLogger.js");
+const userRouter = require("./routes/user.route.js");
 
 dotenv.config();
 
@@ -30,4 +31,4 @@ app.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}`);
 });
 
-export default app;
+module.exports = app;

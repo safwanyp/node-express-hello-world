@@ -1,11 +1,11 @@
-import pool from "../database/pool.js";
-import dotenv from "dotenv";
-import bcrypt from "bcrypt";
-import jwt from "jwt-simple";
+const pool = require("../database/pool.js");
+const dotenv = require("dotenv");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 dotenv.config();
 
-export async function createUser(username, password) {
+async function createUser(username, password) {
     const { rows } = await pool.query(
         `INSERT INTO
             "${process.env.POSTGRES_SCHEMA}".${process.env.POSTGRES_USERS_TABLE}
@@ -19,7 +19,7 @@ export async function createUser(username, password) {
     return rows[0];
 }
 
-export async function createSessionToken(username, password) {
+async function createSessionToken(username, password) {
     const { rows } = await pool.query(
         `SELECT * FROM
             "${process.env.POSTGRES_SCHEMA}".${process.env.POSTGRES_USERS_TABLE}
@@ -51,3 +51,8 @@ export async function createSessionToken(username, password) {
         }
     }
 }
+
+module.exports = {
+    createUser,
+    createSessionToken,
+};

@@ -1,4 +1,4 @@
-import jwt from "jsonwebtoken";
+const jwt = require("jsonwebtoken");
 
 function authMiddleware(req, res, next) {
     try {
@@ -24,4 +24,4 @@ function authMiddleware(req, res, next) {
     }
 }
 
-export default authMiddleware;
+module.exports = authMiddleware;
