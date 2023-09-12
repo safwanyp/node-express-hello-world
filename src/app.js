@@ -14,17 +14,16 @@ dotenv.config();
 const PORT = process.env.PORT || 3000;
 const app = express();
 
-app.use(httpLogger);
+app.use(httpLogger)
+    .use(cors())
+    .use(helmet())
+    .use(express.json())
 
-app.use(cors());
-app.use(helmet());
-app.use(express.json());
+    .use("/", indexRouter)
+    .use("/messages", messageRouter)
+    .use("/users", userRouter)
 
-app.use("/", indexRouter);
-app.use("/messages", messageRouter);
-app.use("/users", userRouter);
-
-app.use(errorMiddleware);
+    .use(errorMiddleware);
 
 app.listen(PORT, () => {
     console.log("Environment: ", process.env.NODE_ENV);
