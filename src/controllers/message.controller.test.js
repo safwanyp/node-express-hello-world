@@ -11,9 +11,9 @@
 //     "message": { "id": 1, "created_by": "safwan", "message": "hello" }
 // })
 
-import { StatusCodes } from "http-status-codes";
-import * as messageController from "./message.controller.js";
-import * as messageService from "../services/message.service.js";
+const { StatusCodes } = require("http-status-codes");
+const messageController = require("./message.controller.js");
+const messageService = require("../services/message.service.js");
 
 jest.mock("../services/message.service.js");
 
@@ -46,8 +46,8 @@ describe("message.controller", () => {
             );
 
             expect(messageService.getMessageById).toHaveBeenCalledWith(1);
-            expect(mockResponse.status).toHaveBeenCalledWith(StatusCodes.OK);
-            expect(mockResponse.json).toHaveBeenCalledWith({
+            expect(mockNext).toHaveBeenCalledWith({
+                code: StatusCodes.OK,
                 status: "Success",
                 message: {
                     id: 1,
@@ -90,10 +90,8 @@ describe("message.controller", () => {
                 created_by: "safwan",
                 message: "hello",
             });
-            expect(mockResponse.status).toHaveBeenCalledWith(
-                StatusCodes.CREATED,
-            );
-            expect(mockResponse.json).toHaveBeenCalledWith({
+            expect(mockNext).toHaveBeenCalledWith({
+                code: StatusCodes.CREATED,
                 status: "Success",
                 message: {
                     id: 1,
@@ -101,7 +99,6 @@ describe("message.controller", () => {
                     message: "hello",
                 },
             });
-            expect(mockNext).toHaveBeenCalled();
         });
     });
 
@@ -113,6 +110,8 @@ describe("message.controller", () => {
                 status: jest.fn().mockReturnThis(),
                 json: jest.fn(),
             };
+
+            const mockNext = jest.fn();
 
             messageService.getMessages.mockResolvedValue([
                 {
@@ -127,11 +126,15 @@ describe("message.controller", () => {
                 },
             ]);
 
-            await messageController.getMessages(mockRequest, mockResponse);
+            await messageController.getMessages(
+                mockRequest,
+                mockResponse,
+                mockNext,
+            );
 
             expect(messageService.getMessages).toHaveBeenCalled();
-            expect(mockResponse.status).toHaveBeenCalledWith(StatusCodes.OK);
-            expect(mockResponse.json).toHaveBeenCalledWith({
+            expect(mockNext).toHaveBeenCalledWith({
+                code: StatusCodes.OK,
                 status: "Success",
                 message: [
                     {

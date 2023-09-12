@@ -80,13 +80,11 @@ const pool = new pg.Pool({
     database: process.env.POSTGRES_DATABASE,
 });
 
-createSchema().then(() => {
-    createUsersTable().then(() => {
-        createTokensTable().then(() => {
-            createMessageTable().then(() => {
-                console.log("Database ready");
-            });
-        });
+pool.on("connect", () => {
+    createSchema().then(() => {
+        createUsersTable();
+        createTokensTable();
+        createMessageTable();
     });
 });
 
