@@ -4,7 +4,7 @@ const createLog = require("../utils/createLog.js");
 
 async function getMessageById(req, res, next) {
     const meta = {
-        path: req.path,
+        path: req.originalUrl,
         method: req.method,
         body: req.body,
         message_id: req.params.id,
@@ -42,7 +42,7 @@ async function getMessageById(req, res, next) {
 
 async function getMessages(req, res, next) {
     const meta = {
-        path: req.path,
+        path: req.originalUrl,
         method: req.method,
         body: req.body,
     };
@@ -79,7 +79,7 @@ async function getMessages(req, res, next) {
 
 async function createMessage(req, res, next) {
     const meta = {
-        path: req.path,
+        path: req.originalUrl,
         method: req.method,
         body: req.body,
     };

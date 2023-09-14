@@ -39,7 +39,7 @@ const validateResponse = ajv.compile(schema);
 
 function validateCreateMessageResponse(responseObject, req, res, next) {
     const meta = {
-        path: req.path,
+        path: req.originalUrl,
         method: req.method,
         body: responseObject,
     };

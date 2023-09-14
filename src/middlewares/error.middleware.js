@@ -8,7 +8,7 @@ function errorMiddleware(error, req, res, next) {
     const code = error.code || 500;
 
     createLog("error", message, req, {
-        path: req.path,
+        path: req.originalUrl,
         method: req.method,
         body: req.body,
     });
