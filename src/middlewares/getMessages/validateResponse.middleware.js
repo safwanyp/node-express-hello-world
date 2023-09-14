@@ -11,8 +11,9 @@ const schema = {
             type: "string",
         },
         message: {
-            if: { type: "object" },
+            if: { type: "array" },
             then: {
+                type: "object",
                 properties: {
                     id: {
                         type: "number",
@@ -47,7 +48,6 @@ function validateGetMessagesResponse(responseObject, req, res, next) {
     createLog("info", "Validating response body", req, meta);
 
     if (responseObject.code >= 400) {
-        createLog("error", "Response body is invalid", req, meta);
         next(responseObject);
         return;
     }
@@ -55,13 +55,12 @@ function validateGetMessagesResponse(responseObject, req, res, next) {
     const valid = validateResponse(responseObject);
 
     if (!valid) {
-        createLog("error", "Response body is invalid", req, meta);
+        createLog("debug", "Response body is invalid", req, meta);
     } else {
         createLog("info", "Response body is valid", req, meta);
     }
 
     res.status(responseObject.code).json(responseObject);
-
     next();
 }
 
