@@ -12,19 +12,33 @@ async function createUser(username, password) {
         password: password,
     });
 
-    const { rows } = await pool.query(
-        `INSERT INTO
-            "${process.env.POSTGRES_SCHEMA}".${process.env.POSTGRES_USERS_TABLE}
-            (username, password)
-            VALUES ($1, $2)
-            RETURNING id, username
-        `,
-        [username, password],
-    );
+    // check if username already exists
+    const user = await getUserByUsername(username);
 
-    createLog("info", "[REPOSITORY] User created", null, rows[0]);
+    if (user) {
+        createLog("info", "[REPOSITORY] User already exists", null, {
+            username: username,
+        });
 
-    return rows[0];
+        return { message: "User already exists" };
+    } else {
+        createLog("info", "[REPOSITORY] User does not exist", null, {
+            username: username,
+        });
+
+        const { rows } = await pool.query(
+            `INSERT INTO
+                "${process.env.POSTGRES_SCHEMA}".${process.env.POSTGRES_USERS_TABLE}
+                (username, password)
+                VALUES ($1, $2)
+                RETURNING id, username
+            `,
+            [username, password],
+        );
+        createLog("info", "[REPOSITORY] User created", null, rows[0]);
+
+        return rows[0];
+    }
 }
 
 async function createSessionToken(username, password) {

@@ -7,7 +7,7 @@ function errorMiddleware(error, req, res, next) {
             : "Internal Server Error";
     const code = error.code || 500;
 
-    createLog("error", message, req, {
+    createLog("error", `[ERROR HANDLER] ${message}`, req, {
         path: req.originalUrl,
         method: req.method,
         body: req.body,

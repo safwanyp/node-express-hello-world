@@ -4,60 +4,112 @@ const jwt = require("jsonwebtoken");
 const createLog = require("../utils/createLog.js");
 
 async function login(req, res, next) {
-    createLog("info", "[CONTROLLER] Attempting to log in", req, {
-        path: req.originalUrl,
-        method: req.method,
-        body: req.body,
-    });
-
-    passport.authenticate("local", { session: false }, (err, user, info) => {
-        if (err) {
-            createLog("error", "[CONTROLLER] Error logging in", req, {
-                path: req.originalUrl,
-                method: req.method,
-                body: err,
-            });
-            return next(err);
-        }
-        if (!user) {
-            createLog("info", "[CONTROLLER] User does not exist", req, {
-                path: req.originalUrl,
-                method: req.method,
-                body: info.message,
-            });
-
-            return next({ code: 404, message: info.message });
-        }
-
-        const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET);
-
-        createLog("info", "[CONTROLLER] User logged in", req, {
+    try {
+        createLog("info", "[CONTROLLER] Attempting to log in", req, {
             path: req.originalUrl,
             method: req.method,
-            body: {
-                username: user.username,
-                token: token,
-            },
+            body: req.body,
         });
 
-        next({
-            status: "Success",
-            code: 200,
-            message: {
-                username: user.username,
-                token: token,
+        passport.authenticate(
+            "local",
+            { session: false },
+            (err, user, info) => {
+                if (err) {
+                    createLog("error", "[CONTROLLER] Error logging in", req, {
+                        path: req.originalUrl,
+                        method: req.method,
+                        body: err,
+                    });
+                    return next(err);
+                }
+                if (!user) {
+                    createLog("info", "[CONTROLLER] User does not exist", req, {
+                        path: req.originalUrl,
+                        method: req.method,
+                        body: info.message,
+                    });
+
+                    return next({ code: 404, message: info.message });
+                }
+
+                const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET);
+
+                createLog("info", "[CONTROLLER] User logged in", req, {
+                    path: req.originalUrl,
+                    method: req.method,
+                    body: {
+                        username: user.username,
+                        token: token,
+                    },
+                });
+
+                next({
+                    status: "Success",
+                    code: 200,
+                    message: {
+                        username: user.username,
+                        token: token,
+                    },
+                });
             },
+        )(req, res, next);
+    } catch (err) {
+        createLog("error", "[CONTROLLER] Error logging in", req, {
+            path: req.originalUrl,
+            method: req.method,
+            body: err,
         });
-    })(req, res, next);
+        next(err);
+    }
 }
 
-async function register(req, res) {
+async function register(req, res, next) {
     const username = req.body.username;
     const password = req.body.password;
 
-    const user = await userService.createUser(username, password);
+    try {
+        createLog("info", "[CONTROLLER] Attempting to register", req, {
+            path: req.originalUrl,
+            method: req.method,
+            body: req.body,
+        });
 
-    return res.json(user);
+        const user = await userService.createUser(username, password);
+
+        if (user.message) {
+            createLog("info", "[CONTROLLER] User already exists", req, {
+                path: req.originalUrl,
+                method: req.method,
+                body: user,
+            });
+
+            return next({ code: 409, message: user.message });
+        }
+
+        createLog("info", "[CONTROLLER] User registered", req, {
+            path: req.originalUrl,
+            method: req.method,
+            body: user,
+        });
+
+        return next({
+            status: "Success",
+            code: 201,
+            message: {
+                username: user.username,
+                id: user.id,
+            },
+        });
+    } catch (err) {
+        createLog("error", "[CONTROLLER] Error registering user", req, {
+            path: req.originalUrl,
+            method: req.method,
+            body: err,
+        });
+
+        next(err);
+    }
 }
 
 module.exports = {

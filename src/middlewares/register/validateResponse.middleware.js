@@ -15,55 +15,52 @@ const schema = {
             then: {
                 type: "object",
                 properties: {
+                    username: {
+                        type: "string",
+                    },
                     id: {
                         type: "number",
                     },
-                    created_by: {
-                        type: "string",
-                    },
-                    message: {
-                        type: "string",
-                    },
                 },
-                required: ["id", "created_by", "message"],
+                required: ["username", "id"],
             },
             else: {
                 type: "string",
             },
         },
     },
+    additionalProperties: false,
     required: ["status", "message", "code"],
 };
 
 const ajv = new Ajv();
 const validateResponse = ajv.compile(schema);
 
-function validateCreateMessageResponse(responseObject, req, res, next) {
+function validateRegisterResponse(responseObject, req, res, next) {
     const meta = {
         path: req.originalUrl,
         method: req.method,
         body: responseObject,
     };
 
-    createLog("info", "Validating response body", req, meta);
-
-    if (responseObject.code >= 500) {
-        createLog("error", "Response body is invalid", req, meta);
+    if (responseObject.code >= 400) {
+        // createLog("error", responseObject.message, req, meta);
         next(responseObject);
         return;
     }
+
+    createLog("info", "Validating response body", req, meta);
 
     const valid = validateResponse(responseObject);
 
     if (!valid) {
         createLog("error", "Response body is invalid", req, meta);
+    } else {
+        createLog("info", "Response body is valid", req, meta);
     }
 
-    createLog("info", "Response body is valid", req, meta);
-
     res.status(responseObject.code).json(responseObject);
-
     next();
 }
 
-module.exports = validateCreateMessageResponse;
+module.exports = validateRegisterResponse;

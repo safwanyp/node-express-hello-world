@@ -13,6 +13,7 @@ const schema = {
         message: {
             if: { type: "object" },
             then: {
+                type: "object",
                 properties: {
                     id: {
                         type: "number",
