@@ -11,19 +11,24 @@ const schema = {
             type: "string",
         },
         message: {
-            type: ["object", "string"],
-            properties: {
-                id: {
-                    type: "number",
+            if: { type: "object" },
+            then: {
+                properties: {
+                    id: {
+                        type: "number",
+                    },
+                    created_by: {
+                        type: "string",
+                    },
+                    message: {
+                        type: "string",
+                    },
                 },
-                created_by: {
-                    type: "string",
-                },
-                message: {
-                    type: "string",
-                },
+                required: ["id", "created_by", "message"],
             },
-            required: ["id", "created_by", "message"],
+            else: {
+                type: "string",
+            },
         },
     },
     required: ["status", "message", "code"],

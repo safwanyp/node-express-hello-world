@@ -11,9 +11,8 @@ const schema = {
             type: "string",
         },
         message: {
-            type: ["array", "string"],
-            items: {
-                type: "object",
+            if: { type: "object" },
+            then: {
                 properties: {
                     id: {
                         type: "number",
@@ -26,6 +25,9 @@ const schema = {
                     },
                 },
                 required: ["id", "created_by", "message"],
+            },
+            else: {
+                type: "string",
             },
         },
     },
