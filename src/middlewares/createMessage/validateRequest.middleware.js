@@ -1,7 +1,7 @@
 const Ajv = require("ajv");
 const createLog = require("../../utils/createLog");
 
-const schema = {
+const createMessageRequestSchema = {
     type: "object",
     properties: {
         created_by: {
@@ -15,7 +15,7 @@ const schema = {
 };
 
 const ajv = new Ajv();
-const validateRequest = ajv.compile(schema);
+const validateRequest = ajv.compile(createMessageRequestSchema);
 
 function validateCreateMessageRequest(req, res, next) {
     const meta = {
@@ -46,4 +46,4 @@ function validateCreateMessageRequest(req, res, next) {
     next();
 }
 
-module.exports = validateCreateMessageRequest;
+module.exports = { validateCreateMessageRequest, createMessageRequestSchema };

@@ -1,7 +1,7 @@
 const Ajv = require("ajv");
 const createLog = require("../../utils/createLog.js");
 
-const schema = {
+const getMessageResponseSchema = {
     type: "object",
     properties: {
         code: {
@@ -11,32 +11,33 @@ const schema = {
             type: "string",
         },
         message: {
-            if: { type: "object" },
-            then: {
-                type: "object",
-                properties: {
-                    id: {
-                        type: "number",
+            oneOf: [
+                {
+                    type: "object",
+                    properties: {
+                        id: {
+                            type: "number",
+                        },
+                        created_by: {
+                            type: "string",
+                        },
+                        message: {
+                            type: "string",
+                        },
                     },
-                    created_by: {
-                        type: "string",
-                    },
-                    message: {
-                        type: "string",
-                    },
+                    required: ["id", "created_by", "message"],
                 },
-                required: ["id", "created_by", "message"],
-            },
-            else: {
-                type: "string",
-            },
+                {
+                    type: "string",
+                },
+            ],
         },
     },
     required: ["status", "message", "code"],
 };
 
 const ajv = new Ajv();
-const validateResponse = ajv.compile(schema);
+const validateResponse = ajv.compile(getMessageResponseSchema);
 
 function validateGetMessageResponse(responseObject, req, res, next) {
     const meta = {
@@ -66,4 +67,7 @@ function validateGetMessageResponse(responseObject, req, res, next) {
     next();
 }
 
-module.exports = validateGetMessageResponse;
+module.exports = {
+    validateGetMessageResponse,
+    getMessageResponseSchema,
+};

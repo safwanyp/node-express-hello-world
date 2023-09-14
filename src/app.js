@@ -11,6 +11,8 @@ const indexRouter = require("./routes/index.route.js");
 const userRouter = require("./routes/user.route.js");
 const passportConfig = require("./passport-config");
 const httpLogger = require("./utils/httpLogger.js");
+const swaggerUi = require("swagger-ui-express");
+const swaggerSpecs = require("./swagger-spec.js");
 
 dotenv.config();
 passportConfig(passport);
@@ -28,6 +30,7 @@ app.use(requestIdMiddleware)
     .use("/", indexRouter)
     .use("/messages", messageRouter)
     .use("/users", userRouter)
+    .use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpecs))
 
     .use(errorMiddleware);
 

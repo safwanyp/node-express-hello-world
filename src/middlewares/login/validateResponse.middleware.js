@@ -1,7 +1,7 @@
 const Ajv = require("ajv");
 const createLog = require("../../utils/createLog");
 
-const schema = {
+const loginResponseSchema = {
     type: "object",
     properties: {
         code: {
@@ -11,22 +11,23 @@ const schema = {
             type: "string",
         },
         message: {
-            if: { type: "object" },
-            then: {
-                type: "object",
-                properties: {
-                    username: {
-                        type: "string",
+            oneOf: [
+                {
+                    type: "object",
+                    properties: {
+                        username: {
+                            type: "string",
+                        },
+                        token: {
+                            type: "string",
+                        },
                     },
-                    token: {
-                        type: "string",
-                    },
+                    required: ["username", "token"],
                 },
-                required: ["username", "token"],
-            },
-            else: {
-                type: "string",
-            },
+                {
+                    type: "string",
+                },
+            ],
         },
     },
     additionalProperties: false,
@@ -34,7 +35,7 @@ const schema = {
 };
 
 const ajv = new Ajv();
-const validateResponse = ajv.compile(schema);
+const validateResponse = ajv.compile(loginResponseSchema);
 
 function validateLoginResponse(responseObject, req, res, next) {
     const meta = {
@@ -63,4 +64,4 @@ function validateLoginResponse(responseObject, req, res, next) {
     next();
 }
 
-module.exports = validateLoginResponse;
+module.exports = { validateLoginResponse, loginResponseSchema };

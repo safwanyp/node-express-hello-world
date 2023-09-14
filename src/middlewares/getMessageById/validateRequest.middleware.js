@@ -2,13 +2,13 @@ const Ajv = require("ajv");
 const { StatusCodes } = require("http-status-codes");
 const createLog = require("../../utils/createLog.js");
 
-const schema = {
+const getMessageRequestSchema = {
     type: "object",
     properties: {},
 };
 
 const ajv = new Ajv();
-const validateRequest = ajv.compile(schema);
+const validateRequest = ajv.compile(getMessageRequestSchema);
 
 function validateGetMessageRequest(req, res, next) {
     const meta = {
@@ -39,4 +39,4 @@ function validateGetMessageRequest(req, res, next) {
     next();
 }
 
-module.exports = validateGetMessageRequest;
+module.exports = { validateGetMessageRequest, getMessageRequestSchema };

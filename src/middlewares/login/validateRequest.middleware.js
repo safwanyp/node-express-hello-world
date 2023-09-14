@@ -1,7 +1,7 @@
 const Ajv = require("ajv");
 const createLog = require("../../utils/createLog");
 
-const schema = {
+const loginRequestSchema = {
     type: "object",
     properties: {
         username: {
@@ -15,7 +15,7 @@ const schema = {
 };
 
 const ajv = new Ajv();
-const validateRequest = ajv.compile(schema);
+const validateRequest = ajv.compile(loginRequestSchema);
 
 function validateLoginRequest(req, res, next) {
     const meta = {
@@ -44,4 +44,4 @@ function validateLoginRequest(req, res, next) {
     return next();
 }
 
-module.exports = validateLoginRequest;
+module.exports = { validateLoginRequest, loginRequestSchema };
