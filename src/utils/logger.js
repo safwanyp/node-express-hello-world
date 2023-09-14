@@ -22,14 +22,17 @@ const options = {
     },
 };
 
-const transports = [new winston.transports.Console(options.console)];
+const transports = [];
 
 switch (process.env.NODE_ENV) {
     case "PROD":
         transports.push(loggingWinston);
         break;
     case "DEV":
-        transports.push(new winston.transports.File(options.file));
+        transports.push(
+            new winston.transports.File(options.file),
+            new winston.transports.Console(options.console),
+        );
         break;
     default:
         break;
