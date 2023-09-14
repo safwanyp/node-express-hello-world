@@ -25,6 +25,7 @@ const {
 const {
     registerResponseSchema,
 } = require("./middlewares/register/validateResponse.middleware");
+const SERVER_URL = process.env.SERVER_URL || "http://localhost:3080";
 
 const genericSchema = {
     type: "object",
@@ -62,7 +63,7 @@ const swaggerSpecs = {
     },
     servers: [
         {
-            url: "http://localhost:3080",
+            url: SERVER_URL,
         },
     ],
     paths: {},

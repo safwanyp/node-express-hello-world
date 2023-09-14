@@ -11,14 +11,21 @@ const indexRouter = require("./routes/index.route.js");
 const userRouter = require("./routes/user.route.js");
 const passportConfig = require("./passport-config");
 const httpLogger = require("./utils/httpLogger.js");
-const swaggerUi = require("swagger-ui-express");
+const { SwaggerTheme } = require("swagger-themes");
 const swaggerSpecs = require("./swagger-spec.js");
+const swaggerUi = require("swagger-ui-express");
 
 dotenv.config();
 passportConfig(passport);
 
 const PORT = process.env.PORT || 3000;
 const app = express();
+
+const theme = new SwaggerTheme("v3");
+const options = {
+    explorer: true,
+    customCss: theme.getBuffer("dark"),
+};
 
 app.use(requestIdMiddleware)
     .use(httpLogger)
@@ -30,7 +37,7 @@ app.use(requestIdMiddleware)
     .use("/", indexRouter)
     .use("/messages", messageRouter)
     .use("/users", userRouter)
-    .use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpecs))
+    .use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpecs, options))
 
     .use(errorMiddleware);
 

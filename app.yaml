@@ -12,6 +12,7 @@ env_variables:
     POSTGRES_USERS_TABLE: "users"
     POSTRGES_TOKENS_TABLE: "tokens"
     JWT_SECRET: "secret"
+    SERVER_URL: "https://infinite-deck-397306.oa.r.appspot.com"
 handlers:
     - url: /.*
       script: auto
