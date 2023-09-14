@@ -6,23 +6,23 @@ const createLog = require("../utils/createLog.js");
 
 dotenv.config();
 
-async function createUser(username, password) {
-    createLog("info", "[REPOSITORY] Creating user", null, {
+async function createUser(req, username, password) {
+    createLog("info", "[REPOSITORY] Creating user", req, {
         username: username,
         password: password,
     });
 
     // check if username already exists
-    const user = await getUserByUsername(username);
+    const user = await getUserByUsername(req, username);
 
     if (user) {
-        createLog("info", "[REPOSITORY] User already exists", null, {
+        createLog("info", "[REPOSITORY] User already exists", req, {
             username: username,
         });
 
         return { message: "User already exists" };
     } else {
-        createLog("info", "[REPOSITORY] User does not exist", null, {
+        createLog("info", "[REPOSITORY] User does not exist", req, {
             username: username,
         });
 
@@ -35,14 +35,14 @@ async function createUser(username, password) {
             `,
             [username, password],
         );
-        createLog("info", "[REPOSITORY] User created", null, rows[0]);
+        createLog("info", "[REPOSITORY] User created", req, rows[0]);
 
         return rows[0];
     }
 }
 
-async function createSessionToken(username, password) {
-    createLog("info", "[REPOSITORY] Creating session token", null, {
+async function createSessionToken(req, username, password) {
+    createLog("info", "[REPOSITORY] Creating session token", req, {
         username: username,
         password: password,
     });
@@ -56,40 +56,40 @@ async function createSessionToken(username, password) {
     );
 
     if (!rows[0]) {
-        createLog("info", "[REPOSITORY] User does not exist", null, {
+        createLog("info", "[REPOSITORY] User does not exist", req, {
             username: username,
         });
 
         return { message: "User does not exist" };
     } else {
-        createLog("info", "[REPOSITORY] User exists. Checking password", null, {
+        createLog("info", "[REPOSITORY] User exists. Checking password", req, {
             username: username,
         });
 
         const isPasswordValid = bcrypt.compareSync(password, rows[0].password);
 
         if (!isPasswordValid) {
-            createLog("info", "[REPOSITORY] Password is incorrect", null, {
+            createLog("info", "[REPOSITORY] Password is incorrect", req, {
                 username: username,
             });
 
             return { message: "Password is incorrect" };
         } else {
-            createLog("info", "[REPOSITORY] Password is correct", null, {
+            createLog("info", "[REPOSITORY] Password is correct", req, {
                 username: username,
             });
 
-            createLog("info", "[REPOSITORY] Creating JWT", null, {
+            createLog("info", "[REPOSITORY] Creating JWT", req, {
                 username: username,
             });
 
             const token = jwt.sign({ id: rows[0].id }, process.env.JWT_SECRET);
 
-            createLog("info", "[REPOSITORY] JWT created", null, {
+            createLog("info", "[REPOSITORY] JWT created", req, {
                 username: username,
             });
 
-            createLog("info", "[REPOSITORY] Storing token", null, {
+            createLog("info", "[REPOSITORY] Storing token", req, {
                 username: username,
             });
 
@@ -102,7 +102,7 @@ async function createSessionToken(username, password) {
                 [token, rows[0].id],
             );
 
-            createLog("info", "[REPOSITORY] Token stored", null, {
+            createLog("info", "[REPOSITORY] Token stored", req, {
                 username: username,
             });
 
@@ -111,8 +111,8 @@ async function createSessionToken(username, password) {
     }
 }
 
-async function getUserByUsername(username) {
-    createLog("info", "[REPOSITORY] Getting user by username", null, {
+async function getUserByUsername(req, username) {
+    createLog("info", "[REPOSITORY] Getting user by username", req, {
         username: username,
     });
 
@@ -124,13 +124,13 @@ async function getUserByUsername(username) {
         [username],
     );
 
-    createLog("info", "[REPOSITORY] User retrieved", null, rows[0]);
+    createLog("info", "[REPOSITORY] User retrieved", req, rows[0]);
 
     return rows[0];
 }
 
-async function getUserById(id) {
-    createLog("info", "[REPOSITORY] Getting user by id", null, { id: id });
+async function getUserById(req, id) {
+    createLog("info", "[REPOSITORY] Getting user by id", req, { id: id });
 
     const { rows } = await pool.query(
         `SELECT * FROM
@@ -140,7 +140,7 @@ async function getUserById(id) {
         [id],
     );
 
-    createLog("info", "[REPOSITORY] User retrieved", null, rows[0]);
+    createLog("info", "[REPOSITORY] User retrieved", req, rows[0]);
 
     return rows[0];
 }

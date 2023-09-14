@@ -11,6 +11,8 @@ function errorMiddleware(error, req, res, next) {
         path: req.originalUrl,
         method: req.method,
         body: req.body,
+        errorCode: error.code,
+        errorStack: error.stack,
     });
 
     res.status(code).json({

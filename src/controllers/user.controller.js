@@ -2,6 +2,7 @@ const passport = require("passport");
 const userService = require("../services/user.service.js");
 const jwt = require("jsonwebtoken");
 const createLog = require("../utils/createLog.js");
+const { StatusCodes } = require("http-status-codes");
 
 async function login(req, res, next) {
     try {
@@ -75,7 +76,7 @@ async function register(req, res, next) {
             body: req.body,
         });
 
-        const user = await userService.createUser(username, password);
+        const user = await userService.createUser(req, username, password);
 
         if (user.message) {
             createLog("info", "[CONTROLLER] User already exists", req, {
@@ -84,7 +85,7 @@ async function register(req, res, next) {
                 body: user,
             });
 
-            return next({ code: 409, message: user.message });
+            return next({ code: StatusCodes.CONFLICT, message: user.message });
         }
 
         createLog("info", "[CONTROLLER] User registered", req, {
@@ -106,9 +107,13 @@ async function register(req, res, next) {
             path: req.originalUrl,
             method: req.method,
             body: err,
+            errorStack: err.stack,
         });
 
-        next(err);
+        next({
+            code: StatusCodes.INTERNAL_SERVER_ERROR,
+            message: err.message,
+        });
     }
 }
 

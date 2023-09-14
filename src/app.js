@@ -1,15 +1,16 @@
+const passport = require("passport");
 const express = require("express");
 const dotenv = require("dotenv");
-const cors = require("cors");
 const helmet = require("helmet");
-const passport = require("passport");
+const cors = require("cors");
 
-const passportConfig = require("./passport-config");
-const indexRouter = require("./routes/index.route.js");
-const messageRouter = require("./routes/message.route.js");
 const errorMiddleware = require("./middlewares/error.middleware.js");
-const httpLogger = require("./utils/httpLogger.js");
+const requestIdMiddleware = require("./middlewares/id.middleware");
+const messageRouter = require("./routes/message.route.js");
+const indexRouter = require("./routes/index.route.js");
 const userRouter = require("./routes/user.route.js");
+const passportConfig = require("./passport-config");
+const httpLogger = require("./utils/httpLogger.js");
 
 dotenv.config();
 passportConfig(passport);
@@ -17,7 +18,8 @@ passportConfig(passport);
 const PORT = process.env.PORT || 3000;
 const app = express();
 
-app.use(httpLogger)
+app.use(requestIdMiddleware)
+    .use(httpLogger)
     .use(cors())
     .use(helmet())
     .use(express.json())
