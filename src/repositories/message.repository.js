@@ -19,6 +19,7 @@ async function getMessageById(req, id) {
 
     createLog("info", "[REPOSITORY] Message fetched", req, {
         message_id: id,
+        message: rows[0],
     });
 
     return rows[0];

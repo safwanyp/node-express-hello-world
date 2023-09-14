@@ -5,7 +5,8 @@ async function getMessageById(req, id) {
     createLog("info", "[SERVICE] Fetching message", req, {
         message_id: id,
     });
-    const message = await messageRepository.getMessageById(id);
+
+    const message = await messageRepository.getMessageById(req, id);
 
     createLog("info", "[SERVICE] Message fetched", req, {
         message_id: id,
@@ -18,7 +19,7 @@ async function createMessage(req, body) {
     createLog("info", "[SERVICE] Creating message", req, {
         body: body,
     });
-    const message = await messageRepository.createMessage(body);
+    const message = await messageRepository.createMessage(req, body);
 
     createLog("info", "[SERVICE] Message created", req, {
         message_id: message.id,
@@ -29,7 +30,7 @@ async function createMessage(req, body) {
 
 async function getMessages(req) {
     createLog("info", "[SERVICE] Fetching messages", req, {});
-    const message = await messageRepository.getMessages();
+    const message = await messageRepository.getMessages(req);
 
     createLog("info", "[SERVICE] Messages fetched", req, {});
 
