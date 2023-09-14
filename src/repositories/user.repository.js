@@ -36,7 +36,7 @@ async function createSessionToken(username, password) {
         if (!isPasswordValid) {
             return { message: "Password is incorrect" };
         } else {
-            const token = jwt.encode(password, process.env.JWT_SECRET);
+            const token = jwt.sign({ id: rows[0].id }, process.env.JWT_SECRET);
 
             await pool.query(
                 `INSERT INTO

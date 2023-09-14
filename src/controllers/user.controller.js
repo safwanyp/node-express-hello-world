@@ -10,10 +10,10 @@ async function login(req, res) {
 }
 
 async function register(req, res) {
-    const email = req.body.email;
+    const username = req.body.username;
     const password = req.body.password;
 
-    const user = await userService.createUser(email, password);
+    const user = await userService.createUser(username, password);
 
     return res.json(user);
 }
