@@ -11,6 +11,7 @@ env_variables:
     POSTGRES_MESSAGES_TABLE: "messages"
     POSTGRES_USERS_TABLE: "users"
     POSTRGES_TOKENS_TABLE: "tokens"
+    JWT_SECRET: "secret"
 handlers:
     - url: /.*
       script: auto
