@@ -5,7 +5,6 @@ const createLog = require("../../utils/createLog.js");
 const schema = {
     type: "object",
     properties: {},
-    additionalProperties: false,
 };
 
 const ajv = new Ajv();

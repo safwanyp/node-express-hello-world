@@ -1,5 +1,6 @@
 const pg = require("pg");
 const dotenv = require("dotenv");
+const createLog = require("../utils/createLog");
 
 dotenv.config();
 
@@ -16,7 +17,7 @@ async function createUsersTable() {
     try {
         await pool.query(usersTable);
     } catch (err) {
-        console.log(err);
+        createLog("error", "Error creating users table", null, {});
         pool.end();
     }
 }
@@ -35,7 +36,7 @@ async function createTokensTable() {
     try {
         await pool.query(tokensTable);
     } catch (err) {
-        console.log(err);
+        createLog("error", "Error creating tokens table", null, {});
         pool.end();
     }
 }
@@ -53,7 +54,7 @@ async function createMessageTable() {
     try {
         await pool.query(messageTable);
     } catch (err) {
-        console.log(err);
+        createLog("error", "Error creating message table", null, {});
         pool.end();
     }
 }
@@ -67,7 +68,7 @@ async function createSchema() {
     try {
         await pool.query(schema);
     } catch (err) {
-        console.log(err);
+        createLog("error", "Error creating schema", null, {});
         pool.end();
     }
 }

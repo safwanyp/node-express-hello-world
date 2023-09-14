@@ -11,8 +11,8 @@ const messageRouter = express.Router();
 
 messageRouter.get(
     "/",
-    authMiddleware,
     validateGetMessageRequest,
+    authMiddleware,
     messageController.getMessages,
     validateGetMessagesResponse,
 );

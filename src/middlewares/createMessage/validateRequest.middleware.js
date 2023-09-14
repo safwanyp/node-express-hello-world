@@ -39,9 +39,9 @@ function validateCreateMessageRequest(req, res, next) {
 
         next(response);
         return;
-    } else {
-        createLog("info", "Request body is valid", req, meta);
     }
+
+    createLog("info", "Request body is valid", req, meta);
 
     next();
 }

@@ -56,9 +56,9 @@ function validateGetMessageResponse(responseObject, req, res, next) {
 
     if (!valid) {
         createLog("error", "Response body is invalid", req, meta);
-    } else {
-        createLog("info", "Response body is valid", req, meta);
     }
+
+    createLog("info", "Response body is valid", req, meta);
 
     res.status(responseObject.code).json(responseObject);
 
