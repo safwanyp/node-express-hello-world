@@ -1,14 +1,53 @@
 const passport = require("passport");
 const userService = require("../services/user.service.js");
 const jwt = require("jsonwebtoken");
+const createLog = require("../utils/createLog.js");
 
 async function login(req, res, next) {
+    createLog("info", "[CONTROLLER] Attempting to log in", req, {
+        path: req.originalUrl,
+        method: req.method,
+        body: req.body,
+    });
+
     passport.authenticate("local", { session: false }, (err, user, info) => {
-        if (err) return next(err);
-        if (!user) return res.status(400).json({ message: info.message });
+        if (err) {
+            createLog("error", "[CONTROLLER] Error logging in", req, {
+                path: req.originalUrl,
+                method: req.method,
+                body: err,
+            });
+            return next(err);
+        }
+        if (!user) {
+            createLog("info", "[CONTROLLER] User does not exist", req, {
+                path: req.originalUrl,
+                method: req.method,
+                body: info.message,
+            });
+
+            return next({ code: 404, message: info.message });
+        }
 
         const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET);
-        return res.json({ token });
+
+        createLog("info", "[CONTROLLER] User logged in", req, {
+            path: req.originalUrl,
+            method: req.method,
+            body: {
+                username: user.username,
+                token: token,
+            },
+        });
+
+        next({
+            status: "Success",
+            code: 200,
+            message: {
+                username: user.username,
+                token: token,
+            },
+        });
     })(req, res, next);
 }
 
