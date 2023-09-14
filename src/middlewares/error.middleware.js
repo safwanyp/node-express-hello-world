@@ -1,4 +1,4 @@
-const logger = require("../utils/logger.js");
+const createLog = require("../utils/createLog.js");
 
 function errorMiddleware(error, req, res, next) {
     const message =
@@ -7,10 +7,10 @@ function errorMiddleware(error, req, res, next) {
             : "Something went wrong";
     const code = error.code || 500;
 
-    logger.error("Error caugth by middleware", {
-        code: code,
-        status: "Error",
-        message: message,
+    createLog("error", message, req, {
+        path: req.path,
+        method: req.method,
+        body: req.body,
     });
 
     res.status(code).json({

@@ -1,5 +1,5 @@
 const Ajv = require("ajv");
-const logger = require("../../utils/logger.js");
+const createLog = require("../../utils/createLog");
 
 const schema = {
     type: "object",
@@ -36,11 +36,16 @@ const ajv = new Ajv();
 const validateResponse = ajv.compile(schema);
 
 function validateGetMessagesResponse(responseObject, req, res, next) {
-    logger.info(`Validating response body for GET ${req.originalUrl}`, {
+    const meta = {
+        path: req.path,
+        method: req.method,
         body: responseObject,
-    });
+    };
+
+    createLog("info", "Validating response body", req, meta);
 
     if (responseObject.code >= 400) {
+        createLog("error", "Response body is invalid", req, meta);
         next(responseObject);
         return;
     }
@@ -48,19 +53,9 @@ function validateGetMessagesResponse(responseObject, req, res, next) {
     const valid = validateResponse(responseObject);
 
     if (!valid) {
-        logger.error("Response schema validation failed", {
-            errors: validateResponse.errors,
-            body: responseObject,
-        });
-
-        console.error(
-            "Response schema validation failed",
-            validateResponse.errors,
-        );
+        createLog("error", "Response body is invalid", req, meta);
     } else {
-        logger.info("Response body is valid", {
-            body: responseObject,
-        });
+        createLog("info", "Response body is valid", req, meta);
     }
 
     res.status(responseObject.code).json(responseObject);

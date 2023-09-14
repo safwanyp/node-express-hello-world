@@ -1,6 +1,6 @@
 const Ajv = require("ajv");
-const logger = require("../../utils/logger.js");
 const { StatusCodes } = require("http-status-codes");
+const createLog = require("../../utils/createLog.js");
 
 const schema = {
     type: "object",
@@ -12,29 +12,30 @@ const ajv = new Ajv();
 const validateRequest = ajv.compile(schema);
 
 function validateGetMessageRequest(req, res, next) {
-    logger.info(`Validating request body for GET ${req.originalUrl}`, {
+    const meta = {
+        path: req.originalUrl,
+        method: req.method,
         body: req.body,
-    });
+    };
 
+    createLog("info", "Validating request body", req, meta);
     const valid = validateRequest(req.body);
 
     if (!valid) {
-        logger.error("Error validating request body", {
-            errors: validateRequest.errors,
-            body: req.body,
-        });
+        meta.errors = validateRequest.errors;
+
+        createLog("error", "Request body is invalid", req, meta);
 
         next({
             code: StatusCodes.BAD_REQUEST,
             status: "Error",
             message: "Request body should be empty",
         });
+
         return;
     }
 
-    logger.info("Request body is valid", {
-        body: req.body,
-    });
+    createLog("info", "Request body is valid", req, meta);
 
     next();
 }

@@ -1,14 +1,19 @@
 const { StatusCodes } = require("http-status-codes");
 const messageService = require("../services/message.service.js");
-const logger = require("../utils/logger.js");
+const createLog = require("../utils/createLog.js");
 
 async function getMessageById(req, res, next) {
-    try {
-        logger.info(`[CONTROLLER] Fetching message by id`, {
-            id: req.params.id,
-        });
+    const meta = {
+        path: req.path,
+        method: req.method,
+        body: req.body,
+        message_id: req.params.id,
+    };
 
-        const message = await messageService.getMessageById(req.params.id);
+    try {
+        createLog("info", "[CONTROLLER] Fetching message", req, meta);
+
+        const message = await messageService.getMessageById(req, req.params.id);
 
         if (message) {
             const response = {
@@ -17,16 +22,10 @@ async function getMessageById(req, res, next) {
                 message: message,
             };
 
-            logger.info(`[CONTROLLER] Message fetched`, {
-                body: response,
-            });
-
+            createLog("info", "[CONTROLLER] Message fetched", req, meta);
             next(response);
         } else {
-            logger.error(`[CONTROLLER] Message not found`, {
-                id: req.params.id,
-            });
-
+            createLog("error", "[CONTROLLER] Message not found", req, meta);
             next({
                 code: StatusCodes.NOT_FOUND,
                 status: "Error",
@@ -34,10 +33,7 @@ async function getMessageById(req, res, next) {
             });
         }
     } catch (err) {
-        logger.error(`[CONTROLLER] Failed to fetch message`, {
-            error: err,
-        });
-
+        createLog("error", "[CONTROLLER] Failed to fetch message", req, meta);
         next({
             code: StatusCodes.INTERNAL_SERVER_ERROR,
         });
@@ -45,10 +41,16 @@ async function getMessageById(req, res, next) {
 }
 
 async function getMessages(req, res, next) {
-    try {
-        logger.info(`[CONTROLLER] Fetching all messages`);
+    const meta = {
+        path: req.path,
+        method: req.method,
+        body: req.body,
+    };
 
-        const messages = await messageService.getMessages();
+    try {
+        createLog("info", "[CONTROLLER] Fetching messages", req, meta);
+
+        const messages = await messageService.getMessages(req);
 
         if (messages) {
             const response = {
@@ -57,14 +59,10 @@ async function getMessages(req, res, next) {
                 message: messages,
             };
 
-            logger.info(`[CONTROLLER] Messages fetched`, {
-                body: response,
-            });
-
+            createLog("info", "[CONTROLLER] Messages fetched", req, meta);
             next(response);
         } else {
-            logger.error(`[CONTROLLER] No messages found`);
-
+            createLog("error", "[CONTROLLER] No messages found", req, meta);
             next({
                 code: StatusCodes.NOT_FOUND,
                 status: "Error",
@@ -72,10 +70,7 @@ async function getMessages(req, res, next) {
             });
         }
     } catch (err) {
-        logger.error(`[CONTROLLER] Failed to fetch messages`, {
-            error: err,
-        });
-
+        createLog("error", "[CONTROLLER] Failed to fetch messages", req, meta);
         next({
             code: StatusCodes.INTERNAL_SERVER_ERROR,
         });
@@ -83,34 +78,43 @@ async function getMessages(req, res, next) {
 }
 
 async function createMessage(req, res, next) {
-    logger.info(`[CONTROLLER] Creating message`, {
+    const meta = {
+        path: req.path,
+        method: req.method,
         body: req.body,
-    });
+    };
 
-    const message = await messageService.createMessage(req.body);
+    try {
+        createLog("info", "[CONTROLLER] Creating message", req, meta);
+        const message = await messageService.createMessage(req, req.body);
 
-    if (message !== null) {
-        const response = {
-            code: StatusCodes.CREATED,
-            status: "Success",
-            message: message,
-        };
+        if (message !== null) {
+            const response = {
+                code: StatusCodes.CREATED,
+                status: "Success",
+                message: message,
+            };
 
-        logger.info(`[CONTROLLER] Message created`, {
-            body: response,
-        });
-
-        next(response);
-    } else {
-        logger.error(`[CONTROLLER] Failed to create message`, {
-            body: req.body,
-        });
-
+            createLog("info", "[CONTROLLER] Message created", req, meta);
+            next(response);
+        } else {
+            createLog(
+                "error",
+                "[CONTROLLER] Failed to create message",
+                req,
+                meta,
+            );
+            next({
+                code: StatusCodes.INTERNAL_SERVER_ERROR,
+            });
+        }
+        next();
+    } catch (err) {
+        createLog("error", "[CONTROLLER] Failed to create message", req, meta);
         next({
             code: StatusCodes.INTERNAL_SERVER_ERROR,
         });
     }
-    next();
 }
 
 module.exports = {

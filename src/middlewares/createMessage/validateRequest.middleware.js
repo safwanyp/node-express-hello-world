@@ -1,5 +1,5 @@
 const Ajv = require("ajv");
-const logger = require("../../utils/logger.js");
+const createLog = require("../../utils/createLog");
 
 const schema = {
     type: "object",
@@ -18,17 +18,18 @@ const ajv = new Ajv();
 const validateRequest = ajv.compile(schema);
 
 function validateCreateMessageRequest(req, res, next) {
-    logger.info(`Validating request body for POST ${req.originalUrl}`, {
+    const meta = {
+        path: req.path,
+        method: req.method,
         body: req.body,
-    });
+    };
+
+    createLog("info", "Validating request body", req, meta);
 
     const valid = validateRequest(req.body);
 
     if (!valid) {
-        logger.error("Error validating request body", {
-            errors: validateRequest.errors,
-            body: req.body,
-        });
+        createLog("error", "Request body is invalid", req, meta);
 
         const response = {
             code: 400,
@@ -39,9 +40,7 @@ function validateCreateMessageRequest(req, res, next) {
         next(response);
         return;
     } else {
-        logger.info("Request body is valid", {
-            body: req.body,
-        });
+        createLog("info", "Request body is valid", req, meta);
     }
 
     next();

@@ -1,12 +1,3 @@
-// import express from "express";
-// import * as messageController from "../controllers/message.controller.js";
-// import validateGetMessageResponse from "../middlewares/getMessageById/validateResponse.middleware.js";
-// import validateGetMessagesResponse from "../middlewares/getMessages/validateResponse.middleware.js";
-// import validateGetMessageRequest from "../middlewares/getMessageById/validateRequest.middleware.js";
-// import validateCreateMessageResponse from "../middlewares/createMessage/validateResponse.middleware.js";
-// import validateCreateMessageRequest from "../middlewares/createMessage/validateRequest.middleware.js";
-// import authMiddleware from "../middlewares/auth.middleware.js";
-
 const express = require("express");
 const messageController = require("../controllers/message.controller.js");
 const validateGetMessageResponse = require("../middlewares/getMessageById/validateResponse.middleware.js");
