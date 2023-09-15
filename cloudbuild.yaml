@@ -17,6 +17,7 @@ steps:
           - "europe-west3"
           - "--platform"
           - "managed"
+          - "--allow-unauthenticated"
           - "--set-env-vars"
           - "JWT_SECRET=projects/$PROJECT_ID/secrets/JWT_SECRET/versions/latest, \
             POSTGRES_HOST=/cloudsql/$PROJECT_ID:europe-west6:hello-world-dev, \
