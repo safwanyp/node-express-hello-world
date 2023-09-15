@@ -13,21 +13,46 @@ steps:
 
     # deploy on app engine
     - name: "gcr.io/cloud-builders/gcloud"
-      entrypoint: "bash"
-      args: [
-              "-c",
-              "gcloud app deploy --set-secrets=[
-              NODE_ENV=projects/685414125397/secrets/NODE_ENV/versions/1,
-              JWT_SECRET=projects/685414125397/secrets/JWT_SECRET/versions/1,
-              POSTGRES_DATABASE=projects/685414125397/secrets/POSTGRES_DATABASE/versions/1,
-              POSTGRES_HOST=projects/685414125397/secrets/POSTGRES_HOST/versions/1,
-              POSTGRES_MESSAGES_TABLE=projects/685414125397/secrets/POSTGRES_MESSAGES_TABLE/versions/1,
-              POSTGRES_PASSWORD=projects/685414125397/secrets/POSTGRES_PASSWORD/versions/1,
-              POSTGRES_PORT=projects/685414125397/secrets/POSTGRES_PORT/versions/1,
-              POSTGRES_SCHEMA=projects/685414125397/secrets/POSTGRES_SCHEMA/versions/1,
-              POSTGRES_USER=projects/685414125397/secrets/POSTGRES_USER/versions/1,
-              POSTGRES_USERS_TABLE=projects/685414125397/secrets/POSTGRES_USERS_TABLE/versions/1,
-              POSTRGES_TOKENS_TABLE=projects/685414125397/secrets/POSTRGES_TOKENS_TABLE/versions/1,
-              SERVER_URL=projects/685414125397/secrets/SERVER_URL/versions/1
-              ]",
+      args: ["app", "deploy"]
+      secretEnv:
+          [
+              "NODE_ENV",
+              "JWT_SECRET",
+              "POSTGRES_DATABASE",
+              "POSTGRES_HOST",
+              "POSTGRES_MESSAGES_TABLE",
+              "POSTGRES_PASSWORD",
+              "POSTGRES_PORT",
+              "POSTGRES_SCHEMA",
+              "POSTGRES_USER",
+              "POSTGRES_USERS_TABLE",
+              "POSTRGES_TOKENS_TABLE",
+              "SERVER_URL",
           ]
+
+availableSecrets:
+    secretManager:
+        - versionName: projects/685414125397/secrets/NODE_ENV/versions/1
+          env: "NODE_ENV"
+        - versionName: projects/685414125397/secrets/JWT_SECRET/versions/1
+          env: "JWT_SECRET"
+        - versionName: projects/685414125397/secrets/POSTGRES_DATABASE/versions/1
+          env: "POSTGRES_DATABASE"
+        - versionName: projects/685414125397/secrets/POSTGRES_HOST/versions/1
+          env: "POSTGRES_HOST"
+        - versionName: projects/685414125397/secrets/POSTGRES_MESSAGES_TABLE/versions/1
+          env: "POSTGRES_MESSAGES_TABLE"
+        - versionName: projects/685414125397/secrets/POSTGRES_PASSWORD/versions/1
+          env: "POSTGRES_PASSWORD"
+        - versionName: projects/685414125397/secrets/POSTGRES_PORT/versions/1
+          env: "POSTGRES_PORT"
+        - versionName: projects/685414125397/secrets/POSTGRES_SCHEMA/versions/1
+          env: "POSTGRES_SCHEMA"
+        - versionName: projects/685414125397/secrets/POSTGRES_USER/versions/1
+          env: "POSTGRES_USER"
+        - versionName: projects/685414125397/secrets/POSTGRES_USERS_TABLE/versions/1
+          env: "POSTGRES_USERS_TABLE"
+        - versionName: projects/685414125397/secrets/POSTRGES_TOKENS_TABLE/versions/1
+          env: "POSTRGES_TOKENS_TABLE"
+        - versionName: projects/685414125397/secrets/SERVER_URL/versions/1
+          env: "SERVER_URL"
