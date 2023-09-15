@@ -29,7 +29,8 @@ steps:
             POSTGRES_MESSAGES_TABLE=messages, \
             POSTGRES_USERS_TABLE=users, \
             POSTRGES_TOKENS_TABLE=tokens, \
-            SERVER_URL=https://$PROJECT_ID.oa.r.appspot.com"
+            SERVER_URL=https://$PROJECT_ID.oa.r.appspot.com, \
+            NODE_ENV=PROD"
 
 images:
     - "gcr.io/$PROJECT_ID/node-express-hw:$SHORT_SHA"
