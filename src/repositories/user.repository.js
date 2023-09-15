@@ -124,9 +124,17 @@ async function getUserByUsername(req, username) {
         [username],
     );
 
-    createLog("info", "[REPOSITORY] User retrieved", req, rows[0]);
+    if (!rows[0]) {
+        createLog("info", "[REPOSITORY] User does not exist", req, {
+            username: username,
+        });
 
-    return rows[0];
+        return { message: "User does not exist" };
+    } else {
+        createLog("info", "[REPOSITORY] User retrieved", req, rows[0]);
+
+        return rows[0];
+    }
 }
 
 async function getUserById(req, id) {
@@ -140,9 +148,15 @@ async function getUserById(req, id) {
         [id],
     );
 
-    createLog("info", "[REPOSITORY] User retrieved", req, rows[0]);
+    if (!rows[0]) {
+        createLog("info", "[REPOSITORY] User does not exist", req, { id: id });
 
-    return rows[0];
+        return { message: "User does not exist" };
+    } else {
+        createLog("info", "[REPOSITORY] User retrieved", req, rows[0]);
+
+        return rows[0];
+    }
 }
 
 module.exports = {
