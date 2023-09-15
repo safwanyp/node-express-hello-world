@@ -124,7 +124,9 @@ async function getUserByUsername(req, username) {
         [username],
     );
 
-    if (!rows[0]) {
+    console.log("Rows: ", rows[0]);
+
+    if (!rows) {
         createLog("info", "[REPOSITORY] User does not exist", req, {
             username: username,
         });
