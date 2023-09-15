@@ -26,6 +26,7 @@ async function getMessageById(req, res, next) {
             next(response);
         } else {
             createLog("error", "[CONTROLLER] Message not found", req, meta);
+
             next({
                 code: StatusCodes.NOT_FOUND,
                 status: "Error",

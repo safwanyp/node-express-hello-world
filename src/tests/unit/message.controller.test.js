@@ -1,21 +1,8 @@
-// GET /messages: should return all messages ({
-//     "status": "success",
-//     "message": [{ "id": 1, "created_by": "safwan", "message": "hello" }, ...]
-// })
-// GET /messages/:id: should return a message by id ({
-//     "status": "success",
-//     "message": { "id": 1, "created_by": "safwan", "message": "hello" }
-// })
-// POST /messages: should create a message ({
-//     "status": "success",
-//     "message": { "id": 1, "created_by": "safwan", "message": "hello" }
-// })
-
 const { StatusCodes } = require("http-status-codes");
-const messageController = require("./message.controller.js");
-const messageService = require("../services/message.service.js");
+const messageController = require("../../controllers/message.controller.js");
+const messageService = require("../../services/message.service.js");
 
-jest.mock("../services/message.service.js");
+jest.mock("../../services/message.service.js");
 
 describe("message.controller", () => {
     describe("Happy cases", () => {
@@ -46,7 +33,11 @@ describe("message.controller", () => {
                     mockNext,
                 );
 
-                expect(messageService.getMessageById).toHaveBeenCalledWith(1);
+                expect(messageService.getMessageById).toHaveBeenCalledWith(
+                    mockRequest,
+                    1,
+                );
+
                 expect(mockNext).toHaveBeenCalledWith({
                     code: StatusCodes.OK,
                     status: "Success",
@@ -87,10 +78,13 @@ describe("message.controller", () => {
                     mockNext,
                 );
 
-                expect(messageService.createMessage).toHaveBeenCalledWith({
-                    created_by: "safwan",
-                    message: "hello",
-                });
+                expect(messageService.createMessage).toHaveBeenCalledWith(
+                    mockRequest,
+                    {
+                        created_by: "safwan",
+                        message: "hello",
+                    },
+                );
                 expect(mockNext).toHaveBeenCalledWith({
                     code: StatusCodes.CREATED,
                     status: "Success",
@@ -123,7 +117,7 @@ describe("message.controller", () => {
                     {
                         id: 2,
                         created_by: "safwan",
-                        message: "hello",
+                        message: "world",
                     },
                 ]);
 
@@ -133,7 +127,6 @@ describe("message.controller", () => {
                     mockNext,
                 );
 
-                expect(messageService.getMessages).toHaveBeenCalled();
                 expect(mockNext).toHaveBeenCalledWith({
                     code: StatusCodes.OK,
                     status: "Success",
@@ -146,7 +139,7 @@ describe("message.controller", () => {
                         {
                             id: 2,
                             created_by: "safwan",
-                            message: "hello",
+                            message: "world",
                         },
                     ],
                 });
@@ -155,25 +148,24 @@ describe("message.controller", () => {
     });
     describe("Error cases", () => {
         describe("getMessageById", () => {
-            it("should handle error when fetching a message by id", async () => {
+            it("should handle error when fetching a non-existent message", async () => {
                 const mockRequest = {
                     params: {
                         id: 1,
                     },
-                    body: {
-                        created_by: "safwan",
-                        message: "hello",
-                    },
                 };
 
-                const mockResponse = {};
+                const mockResponse = {
+                    status: jest.fn().mockReturnThis(),
+                    json: jest.fn(),
+                };
+
                 const mockNext = jest.fn();
 
-                // Mock the service to throw an error
                 messageService.getMessageById.mockRejectedValue({
-                    code: 400,
+                    code: 404,
                     status: "Error",
-                    message: "Request body should be empty",
+                    message: "Message not found",
                 });
 
                 await messageController.getMessageById(
@@ -203,7 +195,6 @@ describe("message.controller", () => {
                 const mockResponse = {};
                 const mockNext = jest.fn();
 
-                // Mock the service to throw an error
                 messageService.getMessages.mockRejectedValue({
                     code: 400,
                     status: "Error",

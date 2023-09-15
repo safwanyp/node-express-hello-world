@@ -35,6 +35,7 @@ switch (process.env.NODE_ENV) {
         );
         break;
     default:
+        transports.push(new winston.transports.Console(options.console));
         break;
 }
 
