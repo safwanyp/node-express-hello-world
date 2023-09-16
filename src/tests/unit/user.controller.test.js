@@ -42,7 +42,7 @@ describe("login.controller", () => {
 
                 expect(mockNext).toHaveBeenCalledWith({
                     status: "Success",
-                    code: 200,
+                    code: StatusCodes.OK,
                     message: {
                         username: "safwan",
                         token: "mocked_jwt_token",
@@ -81,7 +81,7 @@ describe("login.controller", () => {
                 await userController.login(mockRequest, mockResponse, mockNext);
 
                 expect(mockNext).toHaveBeenCalledWith({
-                    code: 404,
+                    code: StatusCodes.NOT_FOUND,
                     message: "User not found",
                 });
             });
@@ -142,7 +142,7 @@ describe("register.controller", () => {
 
             expect(mockNext).toHaveBeenCalledWith({
                 status: "Success",
-                code: 201,
+                code: StatusCodes.CREATED,
                 message: {
                     username: "safwan",
                     id: 1,

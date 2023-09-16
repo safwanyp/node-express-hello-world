@@ -1,3 +1,4 @@
+const { StatusCodes } = require("http-status-codes");
 const createLog = require("../utils/createLog.js");
 
 function errorMiddleware(error, req, res, next) {
@@ -5,7 +6,7 @@ function errorMiddleware(error, req, res, next) {
         typeof error.message === "string"
             ? error.message
             : "Internal Server Error";
-    const code = error.code || 500;
+    const code = error.code || StatusCodes.INTERNAL_SERVER_ERROR;
 
     createLog("error", `[ERROR HANDLER] ${message}`, req, {
         path: req.originalUrl,

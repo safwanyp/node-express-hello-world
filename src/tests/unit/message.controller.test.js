@@ -163,7 +163,7 @@ describe("message.controller", () => {
                 const mockNext = jest.fn();
 
                 messageService.getMessageById.mockRejectedValue({
-                    code: 404,
+                    code: StatusCodes.NOT_FOUND,
                     status: "Error",
                     message: "Message not found",
                 });
@@ -196,7 +196,7 @@ describe("message.controller", () => {
                 const mockNext = jest.fn();
 
                 messageService.getMessages.mockRejectedValue({
-                    code: 400,
+                    code: StatusCodes.BAD_REQUEST,
                     status: "Error",
                     message: "Request body should be empty",
                 });

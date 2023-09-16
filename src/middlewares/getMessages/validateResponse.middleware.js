@@ -1,5 +1,6 @@
 const Ajv = require("ajv");
 const createLog = require("../../utils/createLog");
+const { StatusCodes } = require("http-status-codes");
 
 const getMessagesResponseSchema = {
     type: "object",
@@ -51,7 +52,7 @@ function validateGetMessagesResponse(responseObject, req, res, next) {
 
     createLog("info", "Validating response body", req, meta);
 
-    if (responseObject.code >= 400) {
+    if (responseObject.code >= StatusCodes.BAD_REQUEST) {
         next(responseObject);
         return;
     }

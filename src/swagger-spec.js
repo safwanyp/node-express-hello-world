@@ -25,6 +25,7 @@ const {
 const {
     registerResponseSchema,
 } = require("./middlewares/register/validateResponse.middleware");
+
 const SERVER_URL = process.env.SERVER_URL || "http://localhost:3080";
 
 const genericSchema = {

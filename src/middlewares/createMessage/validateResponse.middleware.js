@@ -1,11 +1,14 @@
 const Ajv = require("ajv");
 const createLog = require("../../utils/createLog");
+const { StatusCodes } = require("http-status-codes");
+const statusCodes = require("../../utils/statusCodes");
 
 const createMessageResponseSchema = {
     type: "object",
     properties: {
         code: {
             type: "number",
+            enum: statusCodes,
         },
         status: {
             type: "string",
@@ -47,7 +50,7 @@ function validateCreateMessageResponse(responseObject, req, res, next) {
 
     createLog("info", "Validating response body", req, meta);
 
-    if (responseObject.code >= 500) {
+    if (responseObject.code >= StatusCodes.INTERNAL_SERVER_ERROR) {
         createLog("error", "Response body is invalid", req, meta);
         next(responseObject);
         return;

@@ -1,6 +1,7 @@
 // const jwt = require("jsonwebtoken");
 const passport = require("passport");
 const createLog = require("../utils/createLog");
+const { StatusCodes } = require("http-status-codes");
 
 function authMiddleware(req, res, next) {
     createLog("info", "[AUTH] Authorizing user", req, {
@@ -26,8 +27,8 @@ function authMiddleware(req, res, next) {
                 body: req.body,
             });
 
-            return res.status(401).json({
-                code: 401,
+            return res.status(StatusCodes.UNAUTHORIZED).json({
+                code: StatusCodes.UNAUTHORIZED,
                 status: "Unauthorized",
                 message: "User not authorized",
             });

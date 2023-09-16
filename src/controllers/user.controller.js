@@ -31,7 +31,10 @@ async function login(req, res, next) {
                         body: info.message,
                     });
 
-                    return next({ code: 404, message: info.message });
+                    return next({
+                        code: StatusCodes.NOT_FOUND,
+                        message: info.message,
+                    });
                 }
 
                 const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET);
@@ -47,7 +50,7 @@ async function login(req, res, next) {
 
                 next({
                     status: "Success",
-                    code: 200,
+                    code: StatusCodes.OK,
                     message: {
                         username: user.username,
                         token: token,
@@ -96,7 +99,7 @@ async function register(req, res, next) {
 
         return next({
             status: "Success",
-            code: 201,
+            code: StatusCodes.CREATED,
             message: {
                 username: user.username,
                 id: user.id,

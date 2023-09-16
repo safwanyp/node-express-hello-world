@@ -1,5 +1,6 @@
 const Ajv = require("ajv");
 const createLog = require("../../utils/createLog");
+const { StatusCodes } = require("http-status-codes");
 
 const loginRequestSchema = {
     type: "object",
@@ -32,7 +33,7 @@ function validateLoginRequest(req, res, next) {
         createLog("error", "Request body is invalid", req, meta);
 
         const response = {
-            code: 400,
+            code: StatusCodes.BAD_REQUEST,
             status: "Error",
             message: validateRequest.errors[0].message,
         };
