@@ -32,5 +32,22 @@ steps:
             SERVER_URL=https://$PROJECT_ID.oa.r.appspot.com, \
             NODE_ENV=PROD"
 
+    - name: "gcr.io/cloud-builders/gcloud"
+      args:
+          [
+              "functions",
+              "deploy",
+              "logToBigQuery",
+              "--runtime",
+              "nodejs18",
+              "--trigger-topic",
+              "logs-topic",
+              "--region",
+              "europe-west3",
+              "--memory",
+              "128MB",
+          ]
+      dir: "log-to-big-query"
+
 images:
     - "gcr.io/$PROJECT_ID/node-express-hw:$SHORT_SHA"
