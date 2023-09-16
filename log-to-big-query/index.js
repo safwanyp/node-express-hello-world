@@ -7,6 +7,8 @@ const tableId = "logs_table";
 exports.logToBigQuery = async (message, context) => {
     context.timestamp = new Date().toISOString();
 
+    console.log("Message is: ", message);
+
     const logEntry = JSON.parse(Buffer.from(message.data, "base64").toString());
     const rows = [logEntry];
 
