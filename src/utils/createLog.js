@@ -14,7 +14,16 @@ function createLog(level, message, req, meta = {}) {
 
     logger.log(level, message, logEntry);
 
-    const dataBuffer = Buffer.from(JSON.stringify(logEntry));
+    const logToInsert = {
+        level: level,
+        message: message,
+        timestamp: logEntry.timestamp,
+        requestId: logEntry.requestId,
+        tracingId: logEntry.tracingId,
+        meta: JSON.stringify(logEntry.meta),
+    };
+
+    const dataBuffer = Buffer.from(JSON.stringify(logToInsert));
     pubsub.topic(topicName).publish(dataBuffer);
 }
 
