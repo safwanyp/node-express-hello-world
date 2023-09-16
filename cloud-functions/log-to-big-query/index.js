@@ -4,7 +4,7 @@ const bigquery = new BigQuery();
 const datasetId = "logs_dataset";
 const tableId = "logs_table";
 
-async function logToBigQuery(message, context) {
+exports.logToBigQuery = async (message, context) => {
     context.timestamp = new Date().toISOString();
 
     const logEntry = JSON.parse(Buffer.from(message.data, "base64").toString());
@@ -17,6 +17,4 @@ async function logToBigQuery(message, context) {
     } catch (error) {
         console.error("Error inserting logs to BigQuery:", error);
     }
-}
-
-module.exports = logToBigQuery;
+};

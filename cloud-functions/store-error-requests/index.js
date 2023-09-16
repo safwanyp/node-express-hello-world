@@ -1,7 +1,7 @@
 const { BigQuery } = require("@google-cloud/bigquery");
 const bigquery = new BigQuery();
 
-async function processErrorLogs(req, res) {
+exports.processErrorLogs = async function processErrorLogs(req, res) {
     const datasetId = "logs_dataset";
     const sourceTableId = "logs_table";
     const destinationTableId = "req_error_logs";
@@ -41,6 +41,4 @@ async function processErrorLogs(req, res) {
     }
 
     res.status(200).send("Processed error logs");
-}
-
-module.exports = processErrorLogs;
+};
