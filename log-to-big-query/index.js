@@ -8,7 +8,7 @@ exports.logToBigQuery = async (message, context) => {
     context.timestamp = new Date().toISOString();
 
     const logEntry = JSON.parse(Buffer.from(message.data, "base64").toString());
-    const rows = [logEntry];
+    const rows = [[logEntry]];
     console.log("Message is: ", rows);
 
     try {
