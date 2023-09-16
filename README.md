@@ -5,7 +5,12 @@ A simple Express.js application built to work with Google Cloud Platform's serve
 - Built with Express.js on a Node.js runtime
 - PostgreSQL on GCP's [Cloud SQL](https://cloud.google.com/sql)
 - GCP's [Cloud Build](https://cloud.google.com/build) for automatic deployments
-- Deployed on GCP's [App Engine](https://cloud.google.com/appengine)
+- Deployed on GCP's [Cloud Run](https://cloud.google.com/run)
+- Using [Cloud Functions](https://cloud.google.com/functions) to deploy middleware services
+- Using [BigQuery](https://cloud.google.com/bigquery) to store app-generated logs
+- Using [Pub/Sub](https://cloud.google.com/pubsub) for streaming to BigQuery.
+- Using [Cloud Scheduler](https://cloud.google.com/scheduler) for running periodic data cleaning operations.
+- Using [Secret Manager](https://cloud.google.com/secret-manager) to store secrets.
 - [Jest](https://jestjs.io) for testing
 - JSON Schema validation with [ajv](https://ajv.js.org/)
 - [Prettier](https://prettier.io/) for formatting
