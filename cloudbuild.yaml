@@ -47,7 +47,23 @@ steps:
               "--memory",
               "128MB",
           ]
-      dir: "log-to-big-query"
+      dir: "cloud-functions/log-to-big-query"
+
+    - name: "gcr.io/cloud-builders/gcloud"
+      args:
+          [
+              "functions",
+              "deploy",
+              "processErrorLogs",
+              "--runtime",
+              "nodejs18",
+              "--trigger-http",
+              "--region",
+              "europe-west3",
+              "--memory",
+              "128MB",
+          ]
+      dir: "cloud-functions/store-error-requests"
 
 images:
     - "gcr.io/$PROJECT_ID/node-express-hw:$SHORT_SHA"
