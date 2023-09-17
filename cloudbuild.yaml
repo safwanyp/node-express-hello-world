@@ -44,7 +44,7 @@ steps:
               fi
 
     - name: "gcr.io/cloud-builders/gcloud"
-      waitFor: ["-check-logToBigQuery-changes"]
+      waitFor: ["check-logToBigQuery-changes"]
       args:
           [
               "functions",
@@ -76,7 +76,7 @@ steps:
               fi
 
     - name: "gcr.io/cloud-builders/gcloud"
-      waitFor: ["-check-processErrorLogs-changes"]
+      waitFor: ["check-processErrorLogs-changes"]
       args:
           [
               "functions",
