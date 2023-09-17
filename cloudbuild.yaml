@@ -6,31 +6,31 @@ steps:
     - name: "gcr.io/cloud-builders/docker"
       args: ["push", "gcr.io/$PROJECT_ID/node-express-hw:$SHORT_SHA"]
 
-    - name: "gcr.io/cloud-builders/docker"
-      entrypoint: "bash"
-      args:
-          - "-c"
-          - "apt-get update && apt-get install -y jq"
-
     - name: "gcr.io/cloud-builders/gcloud"
-      entrypoint: "bash"
       args:
-          - "-c"
-          - |
-              SECRETS=$(gcloud secrets list --filter="labels.abc=app" --format="value(name)")
-
-              ENV_VARS=""
-              for SECRET in $SECRETS; do
-                VALUE=$(gcloud secrets versions access latest --secret=$SECRET)
-                ENV_VARS="$ENV_VARS,$SECRET=$VALUE"
-              done
-
-              gcloud run deploy safwan-node-express-hw \
-                --image gcr.io/$PROJECT_ID/node-express-hw:$SHORT_SHA \
-                --region europe-west3 \
-                --platform managed \
-                --allow-unauthenticated \
-                --set-env-vars $ENV_VARS
+          - "run"
+          - "deploy"
+          - "safwan-node-express-hw"
+          - "--image"
+          - "gcr.io/$PROJECT_ID/node-express-hw:$SHORT_SHA"
+          - "--region"
+          - "europe-west3"
+          - "--platform"
+          - "managed"
+          - "--allow-unauthenticated"
+          - "--set-env-vars"
+          - "JWT_SECRET=projects/$PROJECT_ID/secrets/JWT_SECRET/versions/latest, \
+            POSTGRES_HOST=/cloudsql/$PROJECT_ID:europe-west6:hello-world-dev, \
+            POSTGRES_PORT=5432, \
+            POSTGRES_USER=postgres, \
+            POSTGRES_PASSWORD=aabbccdd, \
+            POSTGRES_DATABASE=postgres, \
+            POSTGRES_SCHEMA=node-hw, \
+            POSTGRES_MESSAGES_TABLE=messages, \
+            POSTGRES_USERS_TABLE=users, \
+            POSTRGES_TOKENS_TABLE=tokens, \
+            SERVER_URL=https://$PROJECT_ID.oa.r.appspot.com, \
+            NODE_ENV=PROD"
 
     - name: "gcr.io/cloud-builders/gcloud"
       args:
