@@ -29,7 +29,22 @@ steps:
                 --allow-unauthenticated \
                 --set-env-vars $env_vars
 
+    - name: "alpine"
+      id: "check-logToBigQuery-changes"
+      entrypoint: "sh"
+      args:
+          - "-c"
+          - |
+              if git diff --name-only $COMMIT_SHA | grep "cloud-functions/log-to-big-query"; then
+                echo "Changes detected in logToBigQuery!"
+                exit 0
+              else
+                echo "No changes in logToBigQuery."
+                exit 1
+              fi
+
     - name: "gcr.io/cloud-builders/gcloud"
+      waitFor: ["-check-logToBigQuery-changes"]
       args:
           [
               "functions",
@@ -46,7 +61,22 @@ steps:
           ]
       dir: "cloud-functions/log-to-big-query"
 
+    - name: "alpine"
+      id: "check-processErrorLogs-changes"
+      entrypoint: "sh"
+      args:
+          - "-c"
+          - |
+              if git diff --name-only $COMMIT_SHA | grep "cloud-functions/store-error-requests"; then
+                echo "Changes detected in processErrorLogs!"
+                exit 0
+              else
+                echo "No changes in processErrorLogs."
+                exit 1
+              fi
+
     - name: "gcr.io/cloud-builders/gcloud"
+      waitFor: ["-check-processErrorLogs-changes"]
       args:
           [
               "functions",
