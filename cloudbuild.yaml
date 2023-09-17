@@ -11,23 +11,23 @@ steps:
       args:
           - "-c"
           - |
-              SECRETS=$(gcloud secrets list --filter="labels.appengine=env" --format="value(name)")
+              secrets_list=$(gcloud secrets list --filter="labels.appengine=env" --format="value(name)")
 
-              ENV_VARS=""
+              env_vars=""
 
-              for SECRET in $SECRETS; do
-                VALUE=$(gcloud secrets versions access latest --secret=$SECRET)
-                ENV_VARS="${ENV_VARS}${SECRET}=${VALUE},"
+              for secret_name in $secrets_list; do
+                secret_value=$(gcloud secrets versions access latest --secret=$secret_name)
+                env_vars="${env_vars}${secret_name}=${secret_value},"
               done
 
-              ENV_VARS=$(echo $ENV_VARS | sed 's/,$//')
+              env_vars=$(echo $env_vars | sed 's/,$//')
 
               gcloud run deploy safwan-node-express-hw \
                 --image gcr.io/$PROJECT_ID/node-express-hw:$SHORT_SHA \
                 --region europe-west3 \
                 --platform managed \
                 --allow-unauthenticated \
-                --set-env-vars $ENV_VARS
+                --set-env-vars $env_vars
 
     - name: "gcr.io/cloud-builders/gcloud"
       args:
