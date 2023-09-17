@@ -1,12 +1,15 @@
 steps:
     - name: "gcr.io/cloud-builders/docker"
+      id: "build image"
       args:
           ["build", "-t", "gcr.io/$PROJECT_ID/node-express-hw:$SHORT_SHA", "."]
 
     - name: "gcr.io/cloud-builders/docker"
+      id: "push to GCR"
       args: ["push", "gcr.io/$PROJECT_ID/node-express-hw:$SHORT_SHA"]
 
     - name: "gcr.io/cloud-builders/gcloud"
+      id: "deploy to Cloud Run"
       entrypoint: "bash"
       args:
           - "-c"
@@ -29,7 +32,7 @@ steps:
                 --allow-unauthenticated \
                 --set-env-vars $env_vars
 
-    - name: "alpine"
+    - name: "gcr.io/cloud-builders/git"
       id: "check-logToBigQuery-changes"
       entrypoint: "sh"
       args:
@@ -61,7 +64,7 @@ steps:
           ]
       dir: "cloud-functions/log-to-big-query"
 
-    - name: "alpine"
+    - name: "gcr.io/cloud-builders/git"
       id: "check-processErrorLogs-changes"
       entrypoint: "sh"
       args:
