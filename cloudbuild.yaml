@@ -40,29 +40,20 @@ steps:
           - |
               if git diff --name-only $COMMIT_SHA | grep "cloud-functions/log-to-big-query"; then
                 echo "Changes detected in logToBigQuery!"
-                exit 0
+                touch /workspace/logToBigQuery-changes
               else
                 echo "No changes in logToBigQuery."
-                exit 1
               fi
 
     - name: "gcr.io/cloud-builders/gcloud"
-      waitFor: ["check-logToBigQuery-changes"]
+      id: "deploy logToBigQuery cloud function"
+      entrypoint: "sh"
       args:
-          [
-              "functions",
-              "deploy",
-              "logToBigQuery",
-              "--runtime",
-              "nodejs18",
-              "--trigger-topic",
-              "logs-topic",
-              "--region",
-              "europe-west3",
-              "--memory",
-              "128MB",
-          ]
-      dir: "cloud-functions/log-to-big-query"
+          - "-c"
+          - |
+              if [ -f /workspace/logToBigQuery-changes ]; then
+                gcloud functions deploy logToBigQuery --runtime nodejs18 --trigger-topic logs-topic --region europe-west3 --memory 128MB --source cloud-functions/log-to-big-query
+              fi
 
     - name: "gcr.io/cloud-builders/git"
       id: "check-processErrorLogs-changes"
@@ -72,28 +63,20 @@ steps:
           - |
               if git diff --name-only $COMMIT_SHA | grep "cloud-functions/store-error-requests"; then
                 echo "Changes detected in processErrorLogs!"
-                exit 0
+                touch /workspace/processErrorLogs-changes
               else
                 echo "No changes in processErrorLogs."
-                exit 1
               fi
 
     - name: "gcr.io/cloud-builders/gcloud"
-      waitFor: ["check-processErrorLogs-changes"]
+      id: "deploy processErrorLogs cloud function"
+      entrypoint: "sh"
       args:
-          [
-              "functions",
-              "deploy",
-              "processErrorLogs",
-              "--runtime",
-              "nodejs18",
-              "--trigger-http",
-              "--region",
-              "europe-west3",
-              "--memory",
-              "128MB",
-          ]
-      dir: "cloud-functions/store-error-requests"
+          - "-c"
+          - |
+              if [ -f /workspace/processErrorLogs-changes ]; then
+                gcloud functions deploy processErrorLogs --runtime nodejs18 --trigger-http --region europe-west3 --memory 128MB --source cloud-functions/store-error-requests
+              fi
 
 images:
     - "gcr.io/$PROJECT_ID/node-express-hw:$SHORT_SHA"
