@@ -12,7 +12,7 @@ async function login(req, res, next) {
             body: req.body,
         });
 
-        passport.authenticate(
+        await passport.authenticate(
             "local",
             { session: false },
             (err, user, info) => {

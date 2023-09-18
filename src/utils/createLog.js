@@ -24,7 +24,9 @@ function createLog(level, message, req, meta = {}) {
     };
 
     const dataBuffer = Buffer.from(JSON.stringify(logToInsert));
-    pubsub.topic(topicName).publish(dataBuffer);
+    process.env.NODE_ENV === "PROD"
+        ? pubsub.topic(topicName).publish(dataBuffer)
+        : null;
 }
 
 module.exports = createLog;

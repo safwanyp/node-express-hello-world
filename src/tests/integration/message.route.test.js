@@ -1,8 +1,12 @@
 const request = require("supertest");
-const app = require("../../app");
+const { app, server } = require("../../app");
 const dotenv = require("dotenv");
 
 dotenv.config();
+
+afterAll((done) => {
+    server.close(done);
+});
 
 const token = process.env.TEST_TOKEN;
 

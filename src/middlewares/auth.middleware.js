@@ -3,14 +3,14 @@ const passport = require("passport");
 const createLog = require("../utils/createLog");
 const { StatusCodes } = require("http-status-codes");
 
-function authMiddleware(req, res, next) {
+async function authMiddleware(req, res, next) {
     createLog("info", "[AUTH] Authorizing user", req, {
         path: req.originalUrl,
         method: req.method,
         body: req.body,
     });
 
-    passport.authenticate("jwt", { session: false }, (err, user) => {
+    await passport.authenticate("jwt", { session: false }, (err, user) => {
         if (err) {
             createLog("error", "[AUTH] Error authorizing user", req, {
                 path: req.originalUrl,

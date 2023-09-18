@@ -10,7 +10,7 @@ const getMessageRequestSchema = {
 const ajv = new Ajv();
 const validateRequest = ajv.compile(getMessageRequestSchema);
 
-function validateGetMessageRequest(req, res, next) {
+async function validateGetMessageRequest(req, res, next) {
     const meta = {
         path: req.originalUrl,
         method: req.method,
@@ -18,7 +18,7 @@ function validateGetMessageRequest(req, res, next) {
     };
 
     createLog("info", "Validating request body", req, meta);
-    const valid = validateRequest(req.body);
+    const valid = await validateRequest(req.body);
 
     if (!valid) {
         meta.errors = validateRequest.errors;

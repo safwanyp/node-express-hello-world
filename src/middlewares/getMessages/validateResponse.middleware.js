@@ -43,7 +43,7 @@ const getMessagesResponseSchema = {
 const ajv = new Ajv();
 const validateResponse = ajv.compile(getMessagesResponseSchema);
 
-function validateGetMessagesResponse(responseObject, req, res, next) {
+async function validateGetMessagesResponse(responseObject, req, res, next) {
     const meta = {
         path: req.originalUrl,
         method: req.method,
@@ -57,7 +57,7 @@ function validateGetMessagesResponse(responseObject, req, res, next) {
         return;
     }
 
-    const valid = validateResponse(responseObject);
+    const valid = await validateResponse(responseObject);
 
     if (!valid) {
         createLog("debug", "Response body is invalid", req, meta);

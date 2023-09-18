@@ -18,7 +18,7 @@ const registerRequestSchema = {
 const ajv = new Ajv();
 const validateRequest = ajv.compile(registerRequestSchema);
 
-function validateRegisterRequest(req, res, next) {
+async function validateRegisterRequest(req, res, next) {
     const meta = {
         path: req.originalUrl,
         method: req.method,
@@ -27,7 +27,7 @@ function validateRegisterRequest(req, res, next) {
 
     createLog("info", "Validating request body", req, meta);
 
-    const valid = validateRequest(req.body);
+    const valid = await validateRequest(req.body);
 
     if (!valid) {
         createLog("error", "Request body is invalid", req, meta);

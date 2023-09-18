@@ -41,6 +41,6 @@ app.use(requestIdMiddleware)
 
     .use(errorMiddleware);
 
-app.listen(PORT);
+const server = app.listen(PORT);
 
-module.exports = app;
+module.exports = { app, server };
