@@ -7,7 +7,7 @@
     "scripts": {
         "test": "jest --detectOpenHandles",
         "dev": "nodemon ./src/app.js",
-        "start": "node ./src/app.js",
+        "start": "node --require ./src/instrumentation.js ./src/app.js",
         "format": "prettier --write .",
         "format:check": "prettier --check .",
         "lint": "eslint --ignore-path .eslintignore --fix .",
@@ -43,8 +43,13 @@
     "dependencies": {
         "@google-cloud/bigquery": "7.2.0",
         "@google-cloud/logging-winston": "6.0.0",
+        "@google-cloud/opentelemetry-cloud-trace-exporter": "2.1.0",
         "@google-cloud/pubsub": "4.0.6",
         "@google-cloud/secret-manager": "5.0.1",
+        "@opentelemetry/api": "1.6.0",
+        "@opentelemetry/auto-instrumentations-node": "0.39.2",
+        "@opentelemetry/sdk-metrics": "1.17.0",
+        "@opentelemetry/sdk-node": "0.43.0",
         "ajv": "8.12.0",
         "bcrypt": "5.1.1",
         "cors": "2.8.5",

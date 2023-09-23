@@ -22,7 +22,7 @@ const messageRouter = express.Router();
 messageRouter.get(
     "/",
     validateGetMessageRequest,
-    authMiddleware,
+    // authMiddleware,
     messageController.getMessages,
     validateGetMessagesResponse,
 );
